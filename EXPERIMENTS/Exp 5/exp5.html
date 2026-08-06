@@ -1,0 +1,3617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Cart Total Calculator</title>
+
+
+    <!-- =========================
+         CSS
+    ========================== -->
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            color: #1e293b;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================== */
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 28px 7%;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+        }
+
+        .header h1 {
+            font-size: 30px;
+            margin-bottom: 7px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================== */
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 35px auto;
+
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 25px;
+        }
+
+
+        /* =========================
+           CARD
+        ========================== */
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+
+            box-shadow:
+                0 10px 30px rgba(0,0,0,0.08);
+        }
+
+
+        /* =========================
+           ADD PRODUCT
+        ========================== */
+
+        .add-product {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+
+            padding: 18px;
+            border-radius: 14px;
+
+            margin-bottom: 25px;
+        }
+
+        .add-product h3 {
+            margin-bottom: 15px;
+            font-size: 17px;
+        }
+
+        .input-grid {
+            display: grid;
+
+            grid-template-columns:
+                1.5fr
+                1fr
+                0.8fr
+                0.7fr;
+
+            gap: 10px;
+        }
+
+        .input-group input,
+        .input-group select {
+
+            width: 100%;
+
+            padding: 11px;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 8px;
+
+            outline: none;
+
+            font-size: 14px;
+
+            background: white;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+
+            border-color: #6366f1;
+
+            box-shadow:
+                0 0 0 3px rgba(99,102,241,0.1);
+        }
+
+        .add-btn {
+
+            margin-top: 12px;
+
+            width: 100%;
+
+            padding: 12px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: #4f46e5;
+
+            color: white;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .add-btn:hover {
+
+            background: #4338ca;
+
+            transform: translateY(-1px);
+        }
+
+
+        /* =========================
+           TITLE
+        ========================== */
+
+        .title-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+        .title-row h2 {
+
+            font-size: 21px;
+        }
+
+        .item-count {
+
+            background: #ede9fe;
+
+            color: #5b21b6;
+
+            padding: 7px 13px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           PRODUCT
+        ========================== */
+
+        .product {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 17px;
+
+            margin-bottom: 14px;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 13px;
+
+            transition: 0.2s;
+        }
+
+        .product:hover {
+
+            transform: translateY(-2px);
+
+            border-color: #818cf8;
+
+            box-shadow:
+                0 5px 15px rgba(79,70,229,0.08);
+        }
+
+        .product-left {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        .product-icon {
+
+            width: 55px;
+            height: 55px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #f1f5f9;
+
+            border-radius: 12px;
+
+            font-size: 27px;
+        }
+
+        .product-name {
+
+            font-weight: bold;
+
+            margin-bottom: 5px;
+        }
+
+        .category {
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+        .product-price {
+
+            color: #4f46e5;
+
+            font-weight: bold;
+
+            margin-top: 5px;
+        }
+
+
+        /* =========================
+           ACTIONS
+        ========================== */
+
+        .actions {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+        .qty-btn {
+
+            width: 31px;
+            height: 31px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #eef2ff;
+
+            color: #4f46e5;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .qty-btn:hover {
+
+            background: #4f46e5;
+
+            color: white;
+        }
+
+        .quantity {
+
+            min-width: 25px;
+
+            text-align: center;
+
+            font-weight: bold;
+        }
+
+        .remove-btn {
+
+            border: none;
+
+            padding: 8px 11px;
+
+            border-radius: 8px;
+
+            background: #fee2e2;
+
+            color: #dc2626;
+
+            cursor: pointer;
+        }
+
+        .remove-btn:hover {
+
+            background: #dc2626;
+
+            color: white;
+        }
+
+
+        /* =========================
+           SUMMARY
+        ========================== */
+
+        .summary h2 {
+
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            padding: 12px 0;
+
+            color: #475569;
+        }
+
+        .discount-row {
+
+            color: #16a34a;
+
+            font-weight: bold;
+        }
+
+        .gst-row {
+
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+
+        /* =========================
+           DISCOUNT
+        ========================== */
+
+        .discount-section {
+
+            margin: 20px 0;
+
+            padding: 15px;
+
+            background: #f8fafc;
+
+            border-radius: 12px;
+        }
+
+        .discount-section label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 13px;
+
+            color: #475569;
+        }
+
+        .discount-section select {
+
+            width: 100%;
+
+            padding: 11px;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            outline: none;
+        }
+
+
+        /* =========================
+           TOTAL
+        ========================== */
+
+        .total {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            border-top: 2px solid #e2e8f0;
+
+            padding-top: 18px;
+
+            margin-top: 10px;
+        }
+
+        .total-price {
+
+            color: #4f46e5;
+
+            font-size: 26px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           CHECKOUT
+        ========================== */
+
+        .checkout {
+
+            width: 100%;
+
+            border: none;
+
+            padding: 14px;
+
+            margin-top: 20px;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f46e5,
+                    #7c3aed
+                );
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .checkout:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 18px rgba(79,70,229,0.25);
+        }
+
+
+        /* =========================
+           INFO BOX
+        ========================== */
+
+        .info {
+
+            margin-top: 20px;
+
+            padding: 15px;
+
+            background: #f5f3ff;
+
+            border-left: 4px solid #7c3aed;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+
+            line-height: 1.7;
+
+            color: #4c1d95;
+        }
+
+
+        /* =========================
+           EMPTY CART
+        ========================== */
+
+        .empty {
+
+            text-align: center;
+
+            padding: 45px 20px;
+
+            color: #64748b;
+        }
+
+        .empty-icon {
+
+            font-size: 50px;
+
+            margin-bottom: 10px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================== */
+
+        @media(max-width: 850px) {
+
+            .container {
+
+                grid-template-columns: 1fr;
+            }
+
+            .input-grid {
+
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+
+        @media(max-width: 600px) {
+
+            .header h1 {
+
+                font-size: 24px;
+            }
+
+            .input-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .product {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+            .actions {
+
+                width: 100%;
+
+                justify-content: flex-end;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="header">
+
+        <h1>
+            🛒 Smart Cart Calculator
+        </h1>
+
+        <p>
+            Array Methods • Object Handling • Discount Logic
+        </p>
+
+    </header>
+
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="container">
+
+
+        <!-- =====================
+             LEFT CARD
+        ====================== -->
+
+        <section class="card">
+
+
+            <!-- ADD PRODUCT -->
+
+            <div class="add-product">
+
+                <h3>
+                    ➕ Add Product to Cart
+                </h3>
+
+
+                <div class="input-grid">
+
+
+                    <!-- PRODUCT NAME -->
+
+                    <div class="input-group">
+
+                        <input
+                            type="text"
+                            id="productName"
+                            placeholder="Product Name"
+                        >
+
+                    </div>
+
+
+                    <!-- CATEGORY -->
+
+                    <div class="input-group">
+
+                        <select id="productCategory">
+
+                            <option value="Sports">
+                                Sports
+                            </option>
+
+                            <option value="Clothing">
+                                Clothing
+                            </option>
+
+                            <option value="Electronics">
+                                Electronics
+                            </option>
+
+                            <option value="Accessories">
+                                Accessories
+                            </option>
+
+                            <option value="Fitness">
+                                Fitness
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PRICE -->
+
+                    <div class="input-group">
+
+                        <input
+                            type="number"
+                            id="productPrice"
+                            placeholder="Price"
+                            min="1"
+                        >
+
+                    </div>
+
+
+                    <!-- QUANTITY -->
+
+                    <div class="input-group">
+
+                        <input
+                            type="number"
+                            id="productQuantity"
+                            placeholder="Qty"
+                            min="1"
+                            value="1"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="add-btn"
+                    id="addProductBtn">
+
+                    Add Product
+
+                </button>
+
+            </div>
+
+
+
+            <!-- CART TITLE -->
+
+            <div class="title-row">
+
+                <h2>
+                    Shopping Cart
+                </h2>
+
+                <span
+                    class="item-count"
+                    id="itemCount">
+
+                    0 Items
+
+                </span>
+
+            </div>
+
+
+            <!-- CART -->
+
+            <div id="cartList"></div>
+
+
+
+            <!-- INFO -->
+
+            <div class="info">
+
+                <strong>
+                    JavaScript Concepts Used
+                </strong>
+
+                <br>
+
+                • Objects & Arrays
+
+                <br>
+
+                • map()
+
+                <br>
+
+                • filter()
+
+                <br>
+
+                • find()
+
+                <br>
+
+                • reduce()
+
+                <br>
+
+                • User Input & DOM Manipulation
+
+                <br>
+
+                • Discount & GST Logic
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================
+             RIGHT CARD
+        ====================== -->
+
+        <section class="card summary">
+
+
+            <h2>
+                Order Summary
+            </h2>
+
+
+            <!-- SUBTOTAL -->
+
+            <div class="summary-row">
+
+                <span>
+                    Subtotal
+                </span>
+
+                <strong id="subtotal">
+                    ₹0.00
+                </strong>
+
+            </div>
+
+
+            <!-- DISCOUNT -->
+
+            <div class="summary-row discount-row">
+
+                <span>
+                    Discount
+                </span>
+
+                <strong id="discount">
+                    - ₹0.00
+                </strong>
+
+            </div>
+
+
+            <!-- AFTER DISCOUNT -->
+
+            <div class="summary-row">
+
+                <span>
+                    After Discount
+                </span>
+
+                <strong id="afterDiscount">
+                    ₹0.00
+                </strong>
+
+            </div>
+
+
+            <!-- GST -->
+
+            <div class="summary-row gst-row">
+
+                <span>
+                    GST (18%)
+                </span>
+
+                <strong id="gst">
+                    ₹0.00
+                </strong>
+
+            </div>
+
+
+            <!-- DISCOUNT SELECT -->
+
+            <div class="discount-section">
+
+                <label>
+                    Select Discount
+                </label>
+
+                <select id="discountSelect">
+
+                    <option value="0">
+                        No Discount
+                    </option>
+
+                    <option value="5">
+                        5% Discount
+                    </option>
+
+                    <option value="10" selected>
+                        10% Discount
+                    </option>
+
+                    <option value="15">
+                        15% Discount
+                    </option>
+
+                    <option value="20">
+                        20% Discount
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- FINAL TOTAL -->
+
+            <div class="total">
+
+                <strong>
+                    Final Total
+                </strong>
+
+                <span
+                    class="total-price"
+                    id="finalTotal">
+
+                    ₹0.00
+
+                </span>
+
+            </div>
+
+
+            <!-- CHECKOUT -->
+
+            <button
+                class="checkout"
+                id="checkoutBtn">
+
+                Proceed to Checkout →
+
+            </button>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+
+        // ==========================================
+        // 1. PRODUCTS ARRAY
+        // ==========================================
+
+        const products = [
+
+            {
+                id: 1,
+                name: "Running Shoes",
+                category: "Sports",
+                price: 2499,
+                emoji: "👟"
+            },
+
+            {
+                id: 2,
+                name: "Sports T-Shirt",
+                category: "Clothing",
+                price: 999,
+                emoji: "👕"
+            },
+
+            {
+                id: 3,
+                name: "Fitness Watch",
+                category: "Electronics",
+                price: 3499,
+                emoji: "⌚"
+            },
+
+            {
+                id: 4,
+                name: "Gym Bag",
+                category: "Accessories",
+                price: 1299,
+                emoji: "🎒"
+            }
+
+        ];
+
+
+
+        // ==========================================
+        // 2. CART ARRAY
+        // ==========================================
+
+        let cart = [
+
+            {
+                productId: 1,
+                quantity: 1
+            },
+
+            {
+                productId: 2,
+                quantity: 2
+            }
+
+        ];
+
+
+
+        // ==========================================
+        // 3. SETTINGS
+        // ==========================================
+
+        let discountPercentage = 10;
+
+        const GST_RATE = 18;
+
+
+
+        // ==========================================
+        // 4. FORMAT CURRENCY
+        // ==========================================
+
+        function formatCurrency(amount) {
+
+            return "₹" +
+
+                amount.toLocaleString(
+                    "en-IN",
+                    {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }
+                );
+
+        }
+
+
+
+        // ==========================================
+        // 5. FIND PRODUCT
+        // ARRAY METHOD: find()
+        // ==========================================
+
+        function findProduct(productId) {
+
+            return products.find(product => {
+
+                return product.id === productId;
+
+            });
+
+        }
+
+
+
+        // ==========================================
+        // 6. CALCULATE TOTAL ITEMS
+        // ARRAY METHOD: reduce()
+        // ==========================================
+
+        function calculateTotalItems() {
+
+            return cart.reduce(
+
+                (total, item) => {
+
+                    return total + item.quantity;
+
+                },
+
+                0
+
+            );
+
+        }
+
+
+
+        // ==========================================
+        // 7. CALCULATE SUBTOTAL
+        // ARRAY METHOD: reduce()
+        // ==========================================
+
+        function calculateSubtotal() {
+
+            return cart.reduce(
+
+                (total, item) => {
+
+                    const product =
+                        findProduct(item.productId);
+
+
+                    if (!product) {
+
+                        return total;
+
+                    }
+
+
+                    return total +
+
+                        product.price *
+                        item.quantity;
+
+                },
+
+                0
+
+            );
+
+        }
+
+
+
+        // ==========================================
+        // 8. CALCULATE DISCOUNT
+        // ==========================================
+
+        function calculateDiscount(subtotal) {
+
+            return (
+
+                subtotal *
+                discountPercentage /
+                100
+
+            );
+
+        }
+
+
+
+        // ==========================================
+        // 9. GET CATEGORY EMOJI
+        // ==========================================
+
+        function getCategoryEmoji(category) {
+
+            const emojiMap = {
+
+                Sports: "🏃",
+
+                Clothing: "👕",
+
+                Electronics: "⌚",
+
+                Accessories: "🎒",
+
+                Fitness: "💪"
+
+            };
+
+
+            return emojiMap[category] || "📦";
+
+        }
+
+
+
+        // ==========================================
+        // 10. RENDER CART
+        // ARRAY METHODS: filter() + map()
+        // ==========================================
+
+        function renderCart() {
+
+            const cartList =
+                document.getElementById("cartList");
+
+
+            // FILTER METHOD
+
+            const validCart = cart.filter(item => {
+
+                return (
+
+                    item.quantity > 0 &&
+
+                    findProduct(item.productId)
+
+                );
+
+            });
+
+
+
+            // EMPTY CART
+
+            if (validCart.length === 0) {
+
+                cartList.innerHTML = `
+
+                    <div class="empty">
+
+                        <div class="empty-icon">
+                            🛒
+                        </div>
+
+                        <h3>
+                            Your cart is empty
+                        </h3>
+
+                        <p>
+                            Add products to your cart.
+                        </p>
+
+                    </div>
+
+                `;
+
+
+                updateSummary();
+
+                return;
+
+            }
+
+
+
+            // MAP METHOD
+
+            cartList.innerHTML =
+
+                validCart.map(item => {
+
+
+                    const product =
+                        findProduct(item.productId);
+
+
+                    const itemTotal =
+                        product.price *
+                        item.quantity;
+
+
+                    return `
+
+                        <div class="product">
+
+
+                            <div class="product-left">
+
+
+                                <div class="product-icon">
+
+                                    ${product.emoji}
+
+                                </div>
+
+
+                                <div>
+
+                                    <div class="product-name">
+
+                                        ${product.name}
+
+                                    </div>
+
+
+                                    <div class="category">
+
+                                        ${product.category}
+
+                                    </div>
+
+
+                                    <div class="product-price">
+
+                                        ${formatCurrency(product.price)}
+
+                                        × ${item.quantity}
+
+                                        =
+
+                                        ${formatCurrency(itemTotal)}
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <div class="actions">
+
+
+                                <button
+                                    class="qty-btn"
+                                    onclick="
+                                        changeQuantity(
+                                            ${product.id},
+                                            -1
+                                        )
+                                    ">
+
+                                    −
+
+                                </button>
+
+
+                                <span class="quantity">
+
+                                    ${item.quantity}
+
+                                </span>
+
+
+                                <button
+                                    class="qty-btn"
+                                    onclick="
+                                        changeQuantity(
+                                            ${product.id},
+                                            1
+                                        )
+                                    ">
+
+                                    +
+
+                                </button>
+
+
+                                <button
+                                    class="remove-btn"
+                                    onclick="
+                                        removeItem(
+                                            ${product.id}
+                                        )
+                                    ">
+
+                                    Remove
+
+                                </button>
+
+
+                            </div>
+
+
+                        </div>
+
+                    `;
+
+                }).join("");
+
+
+            updateSummary();
+
+        }
+
+
+
+        // ==========================================
+        // 11. CHANGE QUANTITY
+        // ==========================================
+
+        function changeQuantity(productId, change) {
+
+
+            const cartItem = cart.find(item => {
+
+                return item.productId === productId;
+
+            });
+
+
+            if (!cartItem) {
+
+                return;
+
+            }
+
+
+            cartItem.quantity += change;
+
+
+            // Remove if quantity becomes 0
+
+            if (cartItem.quantity <= 0) {
+
+                cart = cart.filter(item => {
+
+                    return item.productId !== productId;
+
+                });
+
+            }
+
+
+            renderCart();
+
+        }
+
+
+
+        // ==========================================
+        // 12. REMOVE ITEM
+        // ARRAY METHOD: filter()
+        // ==========================================
+
+        function removeItem(productId) {
+
+            cart = cart.filter(item => {
+
+                return item.productId !== productId;
+
+            });
+
+
+            renderCart();
+
+        }
+
+
+
+        // ==========================================
+        // 13. ADD PRODUCT FROM USER INPUT
+        // ==========================================
+
+        function addProduct() {
+
+
+            // GET INPUT VALUES
+
+            const nameInput =
+                document.getElementById("productName");
+
+            const categoryInput =
+                document.getElementById("productCategory");
+
+            const priceInput =
+                document.getElementById("productPrice");
+
+            const quantityInput =
+                document.getElementById("productQuantity");
+
+
+            const name =
+                nameInput.value.trim();
+
+            const category =
+                categoryInput.value;
+
+            const price =
+                Number(priceInput.value);
+
+            const quantity =
+                Number(quantityInput.value);
+
+
+
+            // ======================================
+            // INPUT VALIDATION
+            // ======================================
+
+            if (name === "") {
+
+                alert(
+                    "Please enter product name."
+                );
+
+                nameInput.focus();
+
+                return;
+
+            }
+
+
+            if (
+                price <= 0 ||
+                isNaN(price)
+            ) {
+
+                alert(
+                    "Please enter a valid price."
+                );
+
+                priceInput.focus();
+
+                return;
+
+            }
+
+
+            if (
+                quantity <= 0 ||
+                isNaN(quantity)
+            ) {
+
+                alert(
+                    "Please enter a valid quantity."
+                );
+
+                quantityInput.focus();
+
+                return;
+
+            }
+
+
+
+            // ======================================
+            // CREATE PRODUCT OBJECT
+            // ======================================
+
+            const newProduct = {
+
+                id: Date.now(),
+
+                name: name,
+
+                category: category,
+
+                price: price,
+
+                emoji:
+                    getCategoryEmoji(category)
+
+            };
+
+
+
+            // ADD TO PRODUCTS ARRAY
+
+            products.push(newProduct);
+
+
+
+            // ADD TO CART
+
+            cart.push({
+
+                productId: newProduct.id,
+
+                quantity: quantity
+
+            });
+
+
+
+            // ======================================
+            // CLEAR INPUTS
+            // ======================================
+
+            nameInput.value = "";
+
+            priceInput.value = "";
+
+            quantityInput.value = 1;
+
+
+
+            // UPDATE CART
+
+            renderCart();
+
+        }
+
+
+
+        // ==========================================
+        // 14. UPDATE ORDER SUMMARY
+        // ==========================================
+
+        function updateSummary() {
+
+
+            const totalItems =
+                calculateTotalItems();
+
+
+            const subtotal =
+                calculateSubtotal();
+
+
+            const discount =
+                calculateDiscount(subtotal);
+
+
+            const afterDiscount =
+                subtotal - discount;
+
+
+            const gst =
+                afterDiscount *
+                GST_RATE /
+                100;
+
+
+            const finalTotal =
+                afterDiscount + gst;
+
+
+
+            // ITEM COUNT
+
+            document.getElementById(
+                "itemCount"
+            ).textContent =
+
+                `${totalItems} ${
+                    totalItems === 1
+                        ? "Item"
+                        : "Items"
+                }`;
+
+
+
+            // SUBTOTAL
+
+            document.getElementById(
+                "subtotal"
+            ).textContent =
+
+                formatCurrency(subtotal);
+
+
+
+            // DISCOUNT
+
+            document.getElementById(
+                "discount"
+            ).textContent =
+
+                "- " +
+                formatCurrency(discount);
+
+
+
+            // AFTER DISCOUNT
+
+            document.getElementById(
+                "afterDiscount"
+            ).textContent =
+
+                formatCurrency(afterDiscount);
+
+
+
+            // GST
+
+            document.getElementById(
+                "gst"
+            ).textContent =
+
+                formatCurrency(gst);
+
+
+
+            // FINAL TOTAL
+
+            document.getElementById(
+                "finalTotal"
+            ).textContent =
+
+                formatCurrency(finalTotal);
+
+        }
+
+
+
+        // ==========================================
+        // 15. DISCOUNT EVENT
+        // ==========================================
+
+        document.getElementById(
+            "discountSelect"
+        ).addEventListener(
+
+            "change",
+
+            function () {
+
+                discountPercentage =
+                    Number(this.value);
+
+                updateSummary();
+
+            }
+
+        );
+
+
+
+        // ==========================================
+        // 16. ADD PRODUCT BUTTON EVENT
+        // ==========================================
+
+        document.getElementById(
+            "addProductBtn"
+        ).addEventListener(
+
+            "click",
+
+            addProduct
+
+        );
+
+
+
+        // ==========================================
+        // 17. ENTER KEY SUPPORT
+        // ==========================================
+
+        document.addEventListener(
+
+            "keydown",
+
+            function(event) {
+
+                if (
+                    event.key === "Enter" &&
+                    document.activeElement.tagName === "INPUT"
+                ) {
+
+                    addProduct();
+
+                }
+
+            }
+
+        );
+
+
+
+        // ==========================================
+        // 18. CHECKOUT
+        // ==========================================
+
+        document.getElementById(
+            "checkoutBtn"
+        ).addEventListener(
+
+            "click",
+
+            function() {
+
+
+                const subtotal =
+                    calculateSubtotal();
+
+
+                if (subtotal === 0) {
+
+                    alert(
+                        "Your cart is empty! Please add products."
+                    );
+
+                    return;
+
+                }
+
+
+                const finalTotal =
+                    document.getElementById(
+                        "finalTotal"
+                    ).textContent;
+
+
+                alert(
+
+                    "🎉 Order Placed Successfully!\n\n" +
+
+                    "Total Items: " +
+
+                    calculateTotalItems() +
+
+                    "\n\nTotal Payable: " +
+
+                    finalTotal
+
+                );
+
+            }
+
+        );
+
+
+
+        // ==========================================
+        // 19. INITIAL RENDER
+        // ==========================================
+
+        renderCart();
+
+
+    </script>
+
+</body>
+
+</html>
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Cart Total Calculator</title>
+
+
+    <!-- =========================
+         CSS
+    ========================== -->
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #eef2ff, #f8fafc);
+            color: #1e293b;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================== */
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 28px 7%;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+        }
+
+        .header h1 {
+            font-size: 30px;
+            margin-bottom: 7px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================== */
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 35px auto;
+
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 25px;
+        }
+
+
+        /* =========================
+           CARD
+        ========================== */
+
+        .card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+
+            box-shadow:
+                0 10px 30px rgba(0,0,0,0.08);
+        }
+
+
+        /* =========================
+           ADD PRODUCT
+        ========================== */
+
+        .add-product {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+
+            padding: 18px;
+            border-radius: 14px;
+
+            margin-bottom: 25px;
+        }
+
+        .add-product h3 {
+            margin-bottom: 15px;
+            font-size: 17px;
+        }
+
+        .input-grid {
+            display: grid;
+
+            grid-template-columns:
+                1.5fr
+                1fr
+                0.8fr
+                0.7fr;
+
+            gap: 10px;
+        }
+
+        .input-group input,
+        .input-group select {
+
+            width: 100%;
+
+            padding: 11px;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 8px;
+
+            outline: none;
+
+            font-size: 14px;
+
+            background: white;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+
+            border-color: #6366f1;
+
+            box-shadow:
+                0 0 0 3px rgba(99,102,241,0.1);
+        }
+
+        .add-btn {
+
+            margin-top: 12px;
+
+            width: 100%;
+
+            padding: 12px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background: #4f46e5;
+
+            color: white;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .add-btn:hover {
+
+            background: #4338ca;
+
+            transform: translateY(-1px);
+        }
+
+
+        /* =========================
+           TITLE
+        ========================== */
+
+        .title-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+        .title-row h2 {
+
+            font-size: 21px;
+        }
+
+        .item-count {
+
+            background: #ede9fe;
+
+            color: #5b21b6;
+
+            padding: 7px 13px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           PRODUCT
+        ========================== */
+
+        .product {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 17px;
+
+            margin-bottom: 14px;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 13px;
+
+            transition: 0.2s;
+        }
+
+        .product:hover {
+
+            transform: translateY(-2px);
+
+            border-color: #818cf8;
+
+            box-shadow:
+                0 5px 15px rgba(79,70,229,0.08);
+        }
+
+        .product-left {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+        .product-icon {
+
+            width: 55px;
+            height: 55px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: #f1f5f9;
+
+            border-radius: 12px;
+
+            font-size: 27px;
+        }
+
+        .product-name {
+
+            font-weight: bold;
+
+            margin-bottom: 5px;
+        }
+
+        .category {
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+        .product-price {
+
+            color: #4f46e5;
+
+            font-weight: bold;
+
+            margin-top: 5px;
+        }
+
+
+        /* =========================
+           ACTIONS
+        ========================== */
+
+        .actions {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+        .qty-btn {
+
+            width: 31px;
+            height: 31px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #eef2ff;
+
+            color: #4f46e5;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .qty-btn:hover {
+
+            background: #4f46e5;
+
+            color: white;
+        }
+
+        .quantity {
+
+            min-width: 25px;
+
+            text-align: center;
+
+            font-weight: bold;
+        }
+
+        .remove-btn {
+
+            border: none;
+
+            padding: 8px 11px;
+
+            border-radius: 8px;
+
+            background: #fee2e2;
+
+            color: #dc2626;
+
+            cursor: pointer;
+        }
+
+        .remove-btn:hover {
+
+            background: #dc2626;
+
+            color: white;
+        }
+
+
+        /* =========================
+           SUMMARY
+        ========================== */
+
+        .summary h2 {
+
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            padding: 12px 0;
+
+            color: #475569;
+        }
+
+        .discount-row {
+
+            color: #16a34a;
+
+            font-weight: bold;
+        }
+
+        .gst-row {
+
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+
+        /* =========================
+           DISCOUNT
+        ========================== */
+
+        .discount-section {
+
+            margin: 20px 0;
+
+            padding: 15px;
+
+            background: #f8fafc;
+
+            border-radius: 12px;
+        }
+
+        .discount-section label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-size: 13px;
+
+            color: #475569;
+        }
+
+        .discount-section select {
+
+            width: 100%;
+
+            padding: 11px;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            outline: none;
+        }
+
+
+        /* =========================
+           TOTAL
+        ========================== */
+
+        .total {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            border-top: 2px solid #e2e8f0;
+
+            padding-top: 18px;
+
+            margin-top: 10px;
+        }
+
+        .total-price {
+
+            color: #4f46e5;
+
+            font-size: 26px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           CHECKOUT
+        ========================== */
+
+        .checkout {
+
+            width: 100%;
+
+            border: none;
+
+            padding: 14px;
+
+            margin-top: 20px;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #4f46e5,
+                    #7c3aed
+                );
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .checkout:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 18px rgba(79,70,229,0.25);
+        }
+
+
+        /* =========================
+           INFO BOX
+        ========================== */
+
+        .info {
+
+            margin-top: 20px;
+
+            padding: 15px;
+
+            background: #f5f3ff;
+
+            border-left: 4px solid #7c3aed;
+
+            border-radius: 8px;
+
+            font-size: 13px;
+
+            line-height: 1.7;
+
+            color: #4c1d95;
+        }
+
+
+        /* =========================
+           EMPTY CART
+        ========================== */
+
+        .empty {
+
+            text-align: center;
+
+            padding: 45px 20px;
+
+            color: #64748b;
+        }
+
+        .empty-icon {
+
+            font-size: 50px;
+
+            margin-bottom: 10px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================== */
+
+        @media(max-width: 850px) {
+
+            .container {
+
+                grid-template-columns: 1fr;
+            }
+
+            .input-grid {
+
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+
+        @media(max-width: 600px) {
+
+            .header h1 {
+
+                font-size: 24px;
+            }
+
+            .input-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .product {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+            .actions {
+
+                width: 100%;
+
+                justify-content: flex-end;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="header">
+
+        <h1>
+            🛒 Smart Cart Calculator
+        </h1>
+
+        <p>
+            Array Methods • Object Handling • Discount Logic
+        </p>
+
+    </header>
+
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="container">
+
+
+        <!-- =====================
+             LEFT CARD
+        ====================== -->
+
+        <section class="card">
+
+
+            <!-- ADD PRODUCT -->
+
+            <div class="add-product">
+
+                <h3>
+                    ➕ Add Product to Cart
+                </h3>
+
+
+                <div class="input-grid">
+
+
+                    <!-- PRODUCT NAME -->
+
+                    <div class="input-group">
+
+                        <input
+                            type="text"
+                            id="productName"
+                            placeholder="Product Name"
+                        >
+
+                    </div>
+
+
+                    <!-- CATEGORY -->
+
+                    <div class="input-group">
+
+                        <select id="productCategory">
+
+                            <option value="Sports">
+                                Sports
+                            </option>
+
+                            <option value="Clothing">
+                                Clothing
+                            </option>
+
+                            <option value="Electronics">
+                                Electronics
+                            </option>
+
+                            <option value="Accessories">
+                                Accessories
+                            </option>
+
+                            <option value="Fitness">
+                                Fitness
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- PRICE -->
+
+                    <div class="input-group">
+
+                        <input
+                            type="number"
+                            id="productPrice"
+                            placeholder="Price"
+                            min="1"
+                        >
+
+                    </div>
+
+
+                    <!-- QUANTITY -->
+
+                    <div class="input-group">
+
+                        <input
+                            type="number"
+                            id="productQuantity"
+                            placeholder="Qty"
+                            min="1"
+                            value="1"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="add-btn"
+                    id="addProductBtn">
+
+                    Add Product
+
+                </button>
+
+            </div>
+
+
+
+            <!-- CART TITLE -->
+
+            <div class="title-row">
+
+                <h2>
+                    Shopping Cart
+                </h2>
+
+                <span
+                    class="item-count"
+                    id="itemCount">
+
+                    0 Items
+
+                </span>
+
+            </div>
+
+
+            <!-- CART -->
+
+            <div id="cartList"></div>
+
+
+
+            <!-- INFO -->
+
+            <div class="info">
+
+                <strong>
+                    JavaScript Concepts Used
+                </strong>
+
+                <br>
+
+                • Objects & Arrays
+
+                <br>
+
+                • map()
+
+                <br>
+
+                • filter()
+
+                <br>
+
+                • find()
+
+                <br>
+
+                • reduce()
+
+                <br>
+
+                • User Input & DOM Manipulation
+
+                <br>
+
+                • Discount & GST Logic
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================
+             RIGHT CARD
+        ====================== -->
+
+        <section class="card summary">
+
+
+            <h2>
+                Order Summary
+            </h2>
+
+
+            <!-- SUBTOTAL -->
+
+            <div class="summary-row">
+
+                <span>
+                    Subtotal
+                </span>
+
+                <strong id="subtotal">
+                    ₹0.00
+                </strong>
+
+            </div>
+
+
+            <!-- DISCOUNT -->
+
+            <div class="summary-row discount-row">
+
+                <span>
+                    Discount
+                </span>
+
+                <strong id="discount">
+                    - ₹0.00
+                </strong>
+
+            </div>
+
+
+            <!-- AFTER DISCOUNT -->
+
+            <div class="summary-row">
+
+                <span>
+                    After Discount
+                </span>
+
+                <strong id="afterDiscount">
+                    ₹0.00
+                </strong>
+
+            </div>
+
+
+            <!-- GST -->
+
+            <div class="summary-row gst-row">
+
+                <span>
+                    GST (18%)
+                </span>
+
+                <strong id="gst">
+                    ₹0.00
+                </strong>
+
+            </div>
+
+
+            <!-- DISCOUNT SELECT -->
+
+            <div class="discount-section">
+
+                <label>
+                    Select Discount
+                </label>
+
+                <select id="discountSelect">
+
+                    <option value="0">
+                        No Discount
+                    </option>
+
+                    <option value="5">
+                        5% Discount
+                    </option>
+
+                    <option value="10" selected>
+                        10% Discount
+                    </option>
+
+                    <option value="15">
+                        15% Discount
+                    </option>
+
+                    <option value="20">
+                        20% Discount
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- FINAL TOTAL -->
+
+            <div class="total">
+
+                <strong>
+                    Final Total
+                </strong>
+
+                <span
+                    class="total-price"
+                    id="finalTotal">
+
+                    ₹0.00
+
+                </span>
+
+            </div>
+
+
+            <!-- CHECKOUT -->
+
+            <button
+                class="checkout"
+                id="checkoutBtn">
+
+                Proceed to Checkout →
+
+            </button>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =========================
+         JAVASCRIPT
+    ========================== -->
+
+    <script>
+
+
+        // ==========================================
+        // 1. PRODUCTS ARRAY
+        // ==========================================
+
+        const products = [
+
+            {
+                id: 1,
+                name: "Running Shoes",
+                category: "Sports",
+                price: 2499,
+                emoji: "👟"
+            },
+
+            {
+                id: 2,
+                name: "Sports T-Shirt",
+                category: "Clothing",
+                price: 999,
+                emoji: "👕"
+            },
+
+            {
+                id: 3,
+                name: "Fitness Watch",
+                category: "Electronics",
+                price: 3499,
+                emoji: "⌚"
+            },
+
+            {
+                id: 4,
+                name: "Gym Bag",
+                category: "Accessories",
+                price: 1299,
+                emoji: "🎒"
+            }
+
+        ];
+
+
+
+        // ==========================================
+        // 2. CART ARRAY
+        // ==========================================
+
+        let cart = [
+
+            {
+                productId: 1,
+                quantity: 1
+            },
+
+            {
+                productId: 2,
+                quantity: 2
+            }
+
+        ];
+
+
+
+        // ==========================================
+        // 3. SETTINGS
+        // ==========================================
+
+        let discountPercentage = 10;
+
+        const GST_RATE = 18;
+
+
+
+        // ==========================================
+        // 4. FORMAT CURRENCY
+        // ==========================================
+
+        function formatCurrency(amount) {
+
+            return "₹" +
+
+                amount.toLocaleString(
+                    "en-IN",
+                    {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    }
+                );
+
+        }
+
+
+
+        // ==========================================
+        // 5. FIND PRODUCT
+        // ARRAY METHOD: find()
+        // ==========================================
+
+        function findProduct(productId) {
+
+            return products.find(product => {
+
+                return product.id === productId;
+
+            });
+
+        }
+
+
+
+        // ==========================================
+        // 6. CALCULATE TOTAL ITEMS
+        // ARRAY METHOD: reduce()
+        // ==========================================
+
+        function calculateTotalItems() {
+
+            return cart.reduce(
+
+                (total, item) => {
+
+                    return total + item.quantity;
+
+                },
+
+                0
+
+            );
+
+        }
+
+
+
+        // ==========================================
+        // 7. CALCULATE SUBTOTAL
+        // ARRAY METHOD: reduce()
+        // ==========================================
+
+        function calculateSubtotal() {
+
+            return cart.reduce(
+
+                (total, item) => {
+
+                    const product =
+                        findProduct(item.productId);
+
+
+                    if (!product) {
+
+                        return total;
+
+                    }
+
+
+                    return total +
+
+                        product.price *
+                        item.quantity;
+
+                },
+
+                0
+
+            );
+
+        }
+
+
+
+        // ==========================================
+        // 8. CALCULATE DISCOUNT
+        // ==========================================
+
+        function calculateDiscount(subtotal) {
+
+            return (
+
+                subtotal *
+                discountPercentage /
+                100
+
+            );
+
+        }
+
+
+
+        // ==========================================
+        // 9. GET CATEGORY EMOJI
+        // ==========================================
+
+        function getCategoryEmoji(category) {
+
+            const emojiMap = {
+
+                Sports: "🏃",
+
+                Clothing: "👕",
+
+                Electronics: "⌚",
+
+                Accessories: "🎒",
+
+                Fitness: "💪"
+
+            };
+
+
+            return emojiMap[category] || "📦";
+
+        }
+
+
+
+        // ==========================================
+        // 10. RENDER CART
+        // ARRAY METHODS: filter() + map()
+        // ==========================================
+
+        function renderCart() {
+
+            const cartList =
+                document.getElementById("cartList");
+
+
+            // FILTER METHOD
+
+            const validCart = cart.filter(item => {
+
+                return (
+
+                    item.quantity > 0 &&
+
+                    findProduct(item.productId)
+
+                );
+
+            });
+
+
+
+            // EMPTY CART
+
+            if (validCart.length === 0) {
+
+                cartList.innerHTML = `
+
+                    <div class="empty">
+
+                        <div class="empty-icon">
+                            🛒
+                        </div>
+
+                        <h3>
+                            Your cart is empty
+                        </h3>
+
+                        <p>
+                            Add products to your cart.
+                        </p>
+
+                    </div>
+
+                `;
+
+
+                updateSummary();
+
+                return;
+
+            }
+
+
+
+            // MAP METHOD
+
+            cartList.innerHTML =
+
+                validCart.map(item => {
+
+
+                    const product =
+                        findProduct(item.productId);
+
+
+                    const itemTotal =
+                        product.price *
+                        item.quantity;
+
+
+                    return `
+
+                        <div class="product">
+
+
+                            <div class="product-left">
+
+
+                                <div class="product-icon">
+
+                                    ${product.emoji}
+
+                                </div>
+
+
+                                <div>
+
+                                    <div class="product-name">
+
+                                        ${product.name}
+
+                                    </div>
+
+
+                                    <div class="category">
+
+                                        ${product.category}
+
+                                    </div>
+
+
+                                    <div class="product-price">
+
+                                        ${formatCurrency(product.price)}
+
+                                        × ${item.quantity}
+
+                                        =
+
+                                        ${formatCurrency(itemTotal)}
+
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+
+
+
+                            <div class="actions">
+
+
+                                <button
+                                    class="qty-btn"
+                                    onclick="
+                                        changeQuantity(
+                                            ${product.id},
+                                            -1
+                                        )
+                                    ">
+
+                                    −
+
+                                </button>
+
+
+                                <span class="quantity">
+
+                                    ${item.quantity}
+
+                                </span>
+
+
+                                <button
+                                    class="qty-btn"
+                                    onclick="
+                                        changeQuantity(
+                                            ${product.id},
+                                            1
+                                        )
+                                    ">
+
+                                    +
+
+                                </button>
+
+
+                                <button
+                                    class="remove-btn"
+                                    onclick="
+                                        removeItem(
+                                            ${product.id}
+                                        )
+                                    ">
+
+                                    Remove
+
+                                </button>
+
+
+                            </div>
+
+
+                        </div>
+
+                    `;
+
+                }).join("");
+
+
+            updateSummary();
+
+        }
+
+
+
+        // ==========================================
+        // 11. CHANGE QUANTITY
+        // ==========================================
+
+        function changeQuantity(productId, change) {
+
+
+            const cartItem = cart.find(item => {
+
+                return item.productId === productId;
+
+            });
+
+
+            if (!cartItem) {
+
+                return;
+
+            }
+
+
+            cartItem.quantity += change;
+
+
+            // Remove if quantity becomes 0
+
+            if (cartItem.quantity <= 0) {
+
+                cart = cart.filter(item => {
+
+                    return item.productId !== productId;
+
+                });
+
+            }
+
+
+            renderCart();
+
+        }
+
+
+
+        // ==========================================
+        // 12. REMOVE ITEM
+        // ARRAY METHOD: filter()
+        // ==========================================
+
+        function removeItem(productId) {
+
+            cart = cart.filter(item => {
+
+                return item.productId !== productId;
+
+            });
+
+
+            renderCart();
+
+        }
+
+
+
+        // ==========================================
+        // 13. ADD PRODUCT FROM USER INPUT
+        // ==========================================
+
+        function addProduct() {
+
+
+            // GET INPUT VALUES
+
+            const nameInput =
+                document.getElementById("productName");
+
+            const categoryInput =
+                document.getElementById("productCategory");
+
+            const priceInput =
+                document.getElementById("productPrice");
+
+            const quantityInput =
+                document.getElementById("productQuantity");
+
+
+            const name =
+                nameInput.value.trim();
+
+            const category =
+                categoryInput.value;
+
+            const price =
+                Number(priceInput.value);
+
+            const quantity =
+                Number(quantityInput.value);
+
+
+
+            // ======================================
+            // INPUT VALIDATION
+            // ======================================
+
+            if (name === "") {
+
+                alert(
+                    "Please enter product name."
+                );
+
+                nameInput.focus();
+
+                return;
+
+            }
+
+
+            if (
+                price <= 0 ||
+                isNaN(price)
+            ) {
+
+                alert(
+                    "Please enter a valid price."
+                );
+
+                priceInput.focus();
+
+                return;
+
+            }
+
+
+            if (
+                quantity <= 0 ||
+                isNaN(quantity)
+            ) {
+
+                alert(
+                    "Please enter a valid quantity."
+                );
+
+                quantityInput.focus();
+
+                return;
+
+            }
+
+
+
+            // ======================================
+            // CREATE PRODUCT OBJECT
+            // ======================================
+
+            const newProduct = {
+
+                id: Date.now(),
+
+                name: name,
+
+                category: category,
+
+                price: price,
+
+                emoji:
+                    getCategoryEmoji(category)
+
+            };
+
+
+
+            // ADD TO PRODUCTS ARRAY
+
+            products.push(newProduct);
+
+
+
+            // ADD TO CART
+
+            cart.push({
+
+                productId: newProduct.id,
+
+                quantity: quantity
+
+            });
+
+
+
+            // ======================================
+            // CLEAR INPUTS
+            // ======================================
+
+            nameInput.value = "";
+
+            priceInput.value = "";
+
+            quantityInput.value = 1;
+
+
+
+            // UPDATE CART
+
+            renderCart();
+
+        }
+
+
+
+        // ==========================================
+        // 14. UPDATE ORDER SUMMARY
+        // ==========================================
+
+        function updateSummary() {
+
+
+            const totalItems =
+                calculateTotalItems();
+
+
+            const subtotal =
+                calculateSubtotal();
+
+
+            const discount =
+                calculateDiscount(subtotal);
+
+
+            const afterDiscount =
+                subtotal - discount;
+
+
+            const gst =
+                afterDiscount *
+                GST_RATE /
+                100;
+
+
+            const finalTotal =
+                afterDiscount + gst;
+
+
+
+            // ITEM COUNT
+
+            document.getElementById(
+                "itemCount"
+            ).textContent =
+
+                `${totalItems} ${
+                    totalItems === 1
+                        ? "Item"
+                        : "Items"
+                }`;
+
+
+
+            // SUBTOTAL
+
+            document.getElementById(
+                "subtotal"
+            ).textContent =
+
+                formatCurrency(subtotal);
+
+
+
+            // DISCOUNT
+
+            document.getElementById(
+                "discount"
+            ).textContent =
+
+                "- " +
+                formatCurrency(discount);
+
+
+
+            // AFTER DISCOUNT
+
+            document.getElementById(
+                "afterDiscount"
+            ).textContent =
+
+                formatCurrency(afterDiscount);
+
+
+
+            // GST
+
+            document.getElementById(
+                "gst"
+            ).textContent =
+
+                formatCurrency(gst);
+
+
+
+            // FINAL TOTAL
+
+            document.getElementById(
+                "finalTotal"
+            ).textContent =
+
+                formatCurrency(finalTotal);
+
+        }
+
+
+
+        // ==========================================
+        // 15. DISCOUNT EVENT
+        // ==========================================
+
+        document.getElementById(
+            "discountSelect"
+        ).addEventListener(
+
+            "change",
+
+            function () {
+
+                discountPercentage =
+                    Number(this.value);
+
+                updateSummary();
+
+            }
+
+        );
+
+
+
+        // ==========================================
+        // 16. ADD PRODUCT BUTTON EVENT
+        // ==========================================
+
+        document.getElementById(
+            "addProductBtn"
+        ).addEventListener(
+
+            "click",
+
+            addProduct
+
+        );
+
+
+
+        // ==========================================
+        // 17. ENTER KEY SUPPORT
+        // ==========================================
+
+        document.addEventListener(
+
+            "keydown",
+
+            function(event) {
+
+                if (
+                    event.key === "Enter" &&
+                    document.activeElement.tagName === "INPUT"
+                ) {
+
+                    addProduct();
+
+                }
+
+            }
+
+        );
+
+
+
+        // ==========================================
+        // 18. CHECKOUT
+        // ==========================================
+
+        document.getElementById(
+            "checkoutBtn"
+        ).addEventListener(
+
+            "click",
+
+            function() {
+
+
+                const subtotal =
+                    calculateSubtotal();
+
+
+                if (subtotal === 0) {
+
+                    alert(
+                        "Your cart is empty! Please add products."
+                    );
+
+                    return;
+
+                }
+
+
+                const finalTotal =
+                    document.getElementById(
+                        "finalTotal"
+                    ).textContent;
+
+
+                alert(
+
+                    "🎉 Order Placed Successfully!\n\n" +
+
+                    "Total Items: " +
+
+                    calculateTotalItems() +
+
+                    "\n\nTotal Payable: " +
+
+                    finalTotal
+
+                );
+
+            }
+
+        );
+
+
+
+        // ==========================================
+        // 19. INITIAL RENDER
+        // ==========================================
+
+        renderCart();
+
+
+    </script>
+
+</body>
+
+</html>
