@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Array & Loop Neon Studio</title>
+<style>
+  body {
+    background-color: #0d1b2a;
+    font-family: 'Arial', sans-serif;
+    color: #a8dadc;
+    margin: 0;
+    padding: 20px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #00b4d8;
+    font-size: 2em;
+    margin-bottom: 10px;
+  }
+
+  .main-container {
+    max-width: 900px;
+    margin: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .section {
+    background-color: #1b263b;
+    border-radius: 15px;
+    padding: 20px;
+    flex: 1 1 45%;
+    box-shadow: 0 0 15px #0077b6;
+  }
+
+  .section h2 {
+    color: #90e0ef;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+  input[type="number"] {
+    width: calc(50% - 20px);
+    padding: 8px;
+    margin-right: 10px;
+    border-radius: 8px;
+    border: 2px solid #00b4d8;
+    background-color: #f1faee;
+    color: #222;
+    font-size: 1em;
+  }
+
+  button {
+    padding: 8px 15px;
+    margin: 5px 5px 10px 5px;
+    border: none;
+    border-radius: 8px;
+    background-color: #00b4d8;
+    color: #fff;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    background-color: #0077b6;
+  }
+
+  #arrayDisplay {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #457b9d;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 1.1em;
+    word-break: break-all;
+  }
+
+  #result {
+    margin-top: 15px;
+    font-size: 1.3em;
+    font-weight: bold;
+    text-align: center;
+    color: #ffd166;
+  }
+
+  .buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+</style>
+</head>
+<body>
+
+<h1>ARRAY & LOOP NEON STUDIO</h1>
+<div class="main-container">
+
+  <!-- Array Operations Section -->
+  <div class="section">
+    <h2>Mutations & Operations</h2>
+    <input type="number" id="numberInput" placeholder="Enter number" />
+
+    <div class="buttons-container">
+      <button onclick="pushNumber()">Push</button>
+      <button onclick="popNumber()">Pop</button>
+      <button onclick="unshiftNumber()">Unshift</button>
+      <button onclick="spliceNumber()">Splice</button>
+    </div>
+
+    <div id="arrayDisplay">Array: []</div>
+    <button style="width: 100%; margin-top:10px" onclick="calculateMaxMin()">Find Max & Min</button>
+    <div id="result"></div>
+  </div>
+
+</div>
+
+<script>
+  let arr = [];
+
+  function updateDisplay() {
+    document.getElementById('arrayDisplay').innerHTML = `Array: [${arr.join(', ')}]`;
+  }
+
+  function pushNumber() {
+    const num = parseFloat(document.getElementById('numberInput').value);
+    if (!isNaN(num)) {
+      arr.push(num);
+      updateDisplay();
+    }
+    document.getElementById('numberInput').value = '';
+  }
+
+  function popNumber() {
+    arr.pop();
+    updateDisplay();
+  }
+
+  function unshiftNumber() {
+    const num = parseFloat(document.getElementById('numberInput').value);
+    if (!isNaN(num)) {
+      arr.unshift(num);
+      updateDisplay();
+    }
+    document.getElementById('numberInput').value = '';
+  }
+
+  function spliceNumber() {
+    const num = parseFloat(document.getElementById('numberInput').value);
+    if (!isNaN(num)) {
+      // Replace element at index 1 if exists, else add at start
+      if (arr.length >= 1) {
+        arr.splice(1, 1, num);
+      } else {
+        arr.splice(0, 0, num);
+      }
+      updateDisplay();
+    }
+    document.getElementById('numberInput').value = '';
+  }
+
+  function calculateMaxMin() {
+    if (arr.length === 0) {
+      document.getElementById('result').innerHTML = 'Array is empty!';
+      return;
+    }
+    const max = Math.max(...arr);
+    const min = Math.min(...arr);
+    document.getElementById('result').innerHTML = `Max: <b>${max}</b> & Min: <b>${min}</b>`;
+  }
+</script>
+
+</body>
+</html>
