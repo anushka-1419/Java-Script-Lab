@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IntelliText Analyzer & Validator</title>
+  <!-- Google Fonts for a premium look -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto+Mono:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    /* Reset & Base Styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #f1f8e9);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 50px;
+    }
+
+    .container {
+      background: #fff;
+      max-width: 1200px;
+      width: 100%;
+      padding: 50px 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    /* Header */
+    h1 {
+      text-align: center;
+      font-size: 3em;
+      color: #2c3e50;
+      margin-bottom: 40px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    /* Input Section with grid layout for responsiveness */
+    .input-section {
+      display: grid;
+      gap: 30px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+      color: #34495e;
+    }
+
+    input[type='text'],
+    textarea {
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #bdc3c7;
+      font-size: 1em;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    input[type='text']:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #2980b9;
+      box-shadow: 0 0 12px rgba(41, 128, 185, 0.2);
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+    }
+
+    /* Call-to-action Button */
+    button {
+      margin-top: 30px;
+      padding: 20px;
+      width: 100%;
+      background: linear-gradient(135deg, #2980b9, #3498db);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.25em;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(41, 128, 185, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      transform: translateY(-2px);
+    }
+
+    /* Results Container */
+    .results-container {
+      margin-top: 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* Section Titles */
+    .section {
+      background: #f4f6f8;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+
+    .section h2 {
+      font-size: 2em;
+      margin-bottom: 25px;
+      color: #2c3e50;
+      border-bottom: 2px solid #dfe6e9;
+      padding-bottom: 10px;
+      font-weight: 600;
+    }
+
+    /* Result Cards */
+    .result-card {
+      background: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .result-card h3 {
+      font-size: 1.5em;
+      margin-bottom: 15px;
+      color: #2980b9;
+    }
+
+    p {
+      margin-bottom: 12px;
+      font-size: 1em;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    /* Code block styling */
+    pre {
+      background-color: #dfe6e9;
+      padding: 15px;
+      border-radius: 10px;
+      overflow-x: auto;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.95em;
+      border: 1px solid #b2bec3;
+      margin-top: 10px;
+    }
+
+    /* Email tags style */
+    .email-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .email-tag {
+      background: linear-gradient(135deg, #2980b9, #3498db);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 25px;
+      font-size: 0.95em;
+      font-weight: 500;
+      box-shadow: 0 4px 15px rgba(41, 128, 185, 0.2);
+      transition: all 0.2s ease;
+    }
+
+    .email-tag:hover {
+      background: linear-gradient(135deg, #3498db, #2980b9);
+    }
+
+    /* Sentiment badge styles */
+    .sentiment {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1em;
+      margin-left: 10px;
+    }
+
+    .positive {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .negative {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    .neutral {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    /* Responsive adjustments */
+    @media(max-width: 768px) {
+      body {
+        padding: 20px;
+      }
+
+      .container {
+        padding: 30px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>IntelliText Analyzer & Validator</h1>
+    <div class="input-section">
+      <div class="input-group">
+        <label for="textInput">Text for Analysis</label>
+        <textarea id="textInput" placeholder="Paste your text here for detailed analysis..."></textarea>
+      </div>
+      <div class="input-group">
+        <label for="emailInput">Email Address for Validation</label>
+        <input type="text" id="emailInput" placeholder="e.g., user@example.com" />
+      </div>
+      <button id="analyzeBtn">Analyze & Validate</button>
+    </div>
+    <div class="results-container" id="resultsContainer" style="display: none;">
+      <!-- Results will be dynamically injected here -->
+    </div>
+  </div>
+
+  <script>
+    const textInput = document.getElementById('textInput');
+    const emailInput = document.getElementById('emailInput');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const resultsContainer = document.getElementById('resultsContainer');
+
+    analyzeBtn.addEventListener('click', runAnalysis);
+
+    function runAnalysis() {
+      resultsContainer.innerHTML = '';
+      resultsContainer.style.display = 'block';
+
+      const text = textInput.value.trim();
+      const email = emailInput.value.trim();
+
+      if (text) {
+        const metrics = analyzeText(text);
+        const wordFreqs = getWordFrequencies(text);
+        const charDist = getCharDistribution(text);
+        const sentiment = getSentiment(text);
+        renderTextAnalysis(metrics, wordFreqs, charDist, sentiment);
+      }
+
+      if (email) {
+        const validation = validateEmail(email);
+        renderEmailValidation(validation, email);
+      }
+
+      if (text) {
+        const emails = extractEmails(text);
+        renderExtractedEmails(emails);
+      }
+    }
+
+    function analyzeText(text) {
+      const charCount = text.length;
+      const words = text.match(/\b\w+\b/g) || [];
+      const wordCount = words.length;
+      const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+      const sentenceCount = sentences.length;
+      const lowerText = text.toLowerCase();
+
+      const syllables = countSyllables(words);
+      const avgWordsPerSentence = wordCount / (sentenceCount || 1);
+      const avgSyllablesPerWord = syllables / (wordCount || 1);
+
+      const fleschEase = calculateFleschEase(wordCount, sentenceCount, syllables);
+      const fleschGrade = calculateFleschGrade(wordCount, sentenceCount, syllables);
+
+      return {
+        charCount,
+        wordCount,
+        sentenceCount,
+        avgWordsPerSentence,
+        avgSyllablesPerWord,
+        fleschEase,
+        fleschGrade,
+        lowerText
+      };
+    }
+
+    function countSyllables(words) {
+      let total = 0;
+      for (const word of words) {
+        total += estimateSyllables(word);
+      }
+      return total;
+    }
+
+    function estimateSyllables(word) {
+      word = word.toLowerCase();
+      if (word.length <= 3) return 1;
+      let count = 0;
+      const vowels = 'aeiouy';
+      let prevVowel = false;
+      for (let char of word) {
+        const isVowel = vowels.includes(char);
+        if (isVowel && !prevVowel) {
+          count++;
+        }
+        prevVowel = isVowel;
+      }
+      if (word.endsWith('e')) count--;
+      if (count === 0) count = 1;
+      return count;
+    }
+
+    function calculateFleschEase(words, sentences, syllables) {
+      return 206.835 - 1.015 * (words / (sentences || 1)) - 84.6 * (syllables / (words || 1));
+    }
+
+    function calculateFleschGrade(words, sentences, syllables) {
+      return 0.39 * (words / (sentences || 1)) + 11.8 * (syllables / (words || 1)) - 15.59;
+    }
+
+    function getWordFrequencies(text) {
+      const stopWords = new Set([
+        'a','an','the','is','are','was','were','be','been','being',
+        'of','to','in','on','at','for','with','by','about','as',
+        'and','or','but','if','then','so','it','its','that','this',
+        'i','me','my','you','your','he','him','his','she','her','hers',
+        'we','us','our','they','them','their','what','which','who','whom',
+        'when','where','why','how','all','any','both','each','few','more',
+        'most','other','some','such','no','nor','not','only','own','same',
+        'than','too','very','s','t','can','will','just','don','should','now'
+      ]);
+      const words = (text.toLowerCase().match(/\b\w+\b/g) || []);
+      const freqMap = {};
+      for (const word of words) {
+        if (!stopWords.has(word)) {
+          freqMap[word] = (freqMap[word] || 0) + 1;
+        }
+      }
+      const sorted = Object.entries(freqMap).map(([w, f]) => ({ word: w, frequency: f })).sort((a,b) => b.frequency - a.frequency);
+      return sorted;
+    }
+
+    function getCharDistribution(text) {
+      const dist = {};
+      for (const ch of text) {
+        dist[ch] = (dist[ch] || 0) + 1;
+      }
+      const mostFreqChar = Object.entries(dist).reduce((a, b) => (b[1] > a[1] ? {char: b[0], count: b[1]} : a), {char: '', count: 0});
+      const uniqueCount = Object.keys(dist).length;
+      return {dist, mostFreqChar, uniqueCount};
+    }
+
+    function getSentiment(text) {
+      const positiveWords = ['great', 'good', 'excellent', 'amazing', 'love', 'happy', 'wonderful', 'fantastic', 'awesome'];
+      const negativeWords = ['bad', 'terrible', 'poor', 'awful', 'hate', 'sad', 'horrible', 'disappointing', 'negative'];
+      const words = (text.toLowerCase().match(/\b\w+\b/g) || []);
+      let p = 0, n = 0;
+      for (const w of words) {
+        if (positiveWords.includes(w)) p++;
+        if (negativeWords.includes(w)) n++;
+      }
+      if (p > n) return 'Positive';
+      if (n > p) return 'Negative';
+      return 'Neutral';
+    }
+
+    function validateEmail(email) {
+      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      const isValid = regex.test(email);
+      let username = '', domain = '';
+      if (isValid) {
+        const atIdx = email.indexOf('@');
+        username = email.substring(0, atIdx);
+        domain = email.substring(atIdx + 1);
+      }
+      return { isValid, username, domain };
+    }
+
+    function extractEmails(text) {
+      const pattern = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}/g;
+      const matches = text.match(pattern) || [];
+      return [...new Set(matches)];
+    }
+
+    function getSentimentClass(value, type='ease') {
+      if (type==='grade') {
+        if (value < 8) return 'positive';
+        if (value > 12) return 'negative';
+        return 'neutral';
+      } else {
+        if (value > 70) return 'positive';
+        if (value < 30) return 'negative';
+        return 'neutral';
+      }
+    }
+
+    // --- Rendering functions ---
+    function renderTextAnalysis(metrics, wordFreqs, charDist, sentiment) {
+      const container = document.createElement('div');
+
+      // Summary & Readability
+      container.innerHTML += `
+        <div class="result-card">
+          <h3>Summary & Readability</h3>
+          <p><strong>Character Count:</strong> ${metrics.charCount}</p>
+          <p><strong>Word Count:</strong> ${metrics.wordCount}</p>
+          <p><strong>Sentence Count:</strong> ${metrics.sentenceCount}</p>
+          <p><strong>Avg. Words/Sentence:</strong> ${metrics.avgWordsPerSentence.toFixed(2)}</p>
+          <p><strong>Avg. Syllables/Word:</strong> ${metrics.avgSyllablesPerWord.toFixed(2)}</p>
+        </div>
+      `;
+
+      // Readability Scores
+      const easeClass = getSentimentClass(metrics.fleschEase);
+      const gradeClass = getSentimentClass(metrics.fleschGrade, 'grade');
+
+      container.innerHTML += `
+        <div class="result-card">
+          <h3>Readability Scores</h3>
+          <p><strong>Flesch Reading Ease:</strong> <span class="${easeClass}">${metrics.fleschEase.toFixed(2)}</span></p>
+          <p><strong>Flesch-Kincaid Grade:</strong> <span class="${gradeClass}">${metrics.fleschGrade.toFixed(2)}</span></p>
+        </div>
+      `;
+
+      // Content Insights
+      container.innerHTML += `
+        <div class="result-card">
+          <h3>Content Insights</h3>
+          <p><strong>Sentiment:</strong> ${sentiment}</p>
+          <p><strong>Top Words:</strong></p>
+          <pre>${wordFreqs.slice(0,5).map(w => `${w.word} (${w.frequency})`).join(', ') || 'N/A'}</pre>
+        </div>
+      `;
+
+      // Character Distribution
+      container.innerHTML += `
+        <div class="result-card">
+          <h3>Character Distribution</h3>
+          <p><strong>Most Frequent Character:</strong> ${charDist.mostFreqChar.char} (${charDist.mostFreqChar.count})</p>
+          <p><strong>Unique Characters:</strong> ${charDist.uniqueCount}</p>
+          <p><strong>Sample (Lowercase):</strong></p>
+          <pre>${metrics.lowerText}</pre>
+        </div>
+      `;
+
+      document.querySelector('.results-container').appendChild(container);
+    }
+
+    function renderEmailValidation(validation, email) {
+      const container = document.createElement('div');
+      container.innerHTML = `
+        <div class="result-card">
+          <h3>Email Validation</h3>
+          <p><strong>Entered Email:</strong> ${email || 'N/A'}</p>
+          <p><strong>Status:</strong> <span class="${validation.isValid ? 'positive' : 'negative'}">${validation.isValid ? '✔️ Valid' : '❌ Invalid'}</span></p>
+          ${validation.isValid ? `
+            <p><strong>Username:</strong> ${validation.username}</p>
+            <p><strong>Domain:</strong> ${validation.domain}</p>
+          ` : `<p class="label-info">Please enter a valid email address in correct format.</p>`}
+        </div>
+      `;
+      document.querySelector('.results-container').appendChild(container);
+    }
+
+    function renderExtractedEmails(emails) {
+      const container = document.createElement('div');
+      if (emails.length > 0) {
+        container.innerHTML = `
+          <div class="result-card">
+            <h3>Extracted Emails</h3>
+            <div class="email-tags">
+              ${emails.map(e => `<div class="email-tag">${e}</div>`).join('')}
+            </div>
+            <p class="label-info">${emails.length} unique email(s) found.</p>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="result-card">
+            <h3>Extracted Emails</h3>
+            <p>No email addresses detected.</p>
+          </div>
+        `;
+      }
+      document.querySelector('.results-container').appendChild(container);
+    }
+
+    // Placeholder sentiment analysis
+    function getSentiment(text) {
+      const positiveWords = ['great', 'good', 'excellent', 'amazing', 'love', 'happy', 'wonderful', 'fantastic', 'awesome'];
+      const negativeWords = ['bad', 'terrible', 'poor', 'awful', 'hate', 'sad', 'horrible', 'disappointing', 'negative'];
+      const words = (text.toLowerCase().match(/\b\w+\b/g) || []);
+      let p = 0, n = 0;
+      for (const w of words) {
+        if (positiveWords.includes(w)) p++;
+        if (negativeWords.includes(w)) n++;
+      }
+      if (p > n) return 'Positive';
+      if (n > p) return 'Negative';
+      return 'Neutral';
+    }
+  </script>
+</body>
+</html>
