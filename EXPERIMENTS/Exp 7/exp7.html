@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>To-Do List</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #e0f7fa; /* Changed background color */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      width: 420px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 26px;
+      color: #006064; /* Changed header color */
+    }
+
+    /* Input and button styling */
+    #task-input {
+      width: calc(100% - 100px);
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #0097a7;
+      border-radius: 4px;
+      outline: none;
+    }
+
+    #add-btn {
+      padding: 10px 20px;
+      margin-left: 10px;
+      background-color: #00bcd4;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    #add-btn:hover {
+      background-color: #0097a7;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #f1f8e9;
+      padding: 10px 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      box-shadow: inset 0 0 3px rgba(0,0,0,0.1);
+    }
+
+    .task-text {
+      flex: 1;
+      font-size: 16px;
+    }
+
+    /* Style for done tasks (strikethrough) */
+    .done {
+      text-decoration: line-through;
+      color: #757575;
+    }
+
+    /* Checkbox style */
+    input[type="checkbox"] {
+      margin-right: 10px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s;
+    }
+
+    .edit-btn {
+      background-color: #ffb74d;
+      color: white;
+    }
+
+    .edit-btn:hover {
+      background-color: #ffa000;
+    }
+
+    .delete-btn {
+      background-color: #e57373;
+      color: white;
+    }
+
+    .delete-btn:hover {
+      background-color: #c62828;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>To-Do List</h1>
+    <div style="display:flex; margin-bottom:20px;">
+      <input type="text" id="task-input" placeholder="Enter a task" />
+      <button id="add-btn">Add</button>
+    </div>
+    <ul id="task-list"></ul>
+  </div>
+
+  <script>
+    const taskInput = document.getElementById('task-input');
+    const addBtn = document.getElementById('add-btn');
+    const taskList = document.getElementById('task-list');
+
+    addBtn.addEventListener('click', () => {
+      const taskText = taskInput.value.trim();
+      if (taskText === '') return;
+
+      const li = document.createElement('li');
+
+      // Checkbox for marking task as done
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+
+      // Span for task text
+      const span = document.createElement('span');
+      span.className = 'task-text';
+      span.textContent = taskText;
+
+      // When checkbox is clicked, toggle 'done' style
+      checkbox.onclick = () => {
+        if (checkbox.checked) {
+          span.classList.add('done');
+        } else {
+          span.classList.remove('done');
+        }
+      };
+
+      // Buttons for edit and delete
+      const btnsDiv = document.createElement('div');
+      btnsDiv.className = 'buttons';
+
+      const editBtn = document.createElement('button');
+      editBtn.className = 'btn edit-btn';
+      editBtn.textContent = 'Edit';
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'btn delete-btn';
+      deleteBtn.textContent = 'Delete';
+
+      // Edit task
+      editBtn.onclick = () => {
+        const newTask = prompt('Edit task:', span.textContent);
+        if (newTask !== null && newTask.trim() !== '') {
+          span.textContent = newTask.trim();
+        }
+      };
+
+      // Delete task
+      deleteBtn.onclick = () => {
+        taskList.removeChild(li);
+      };
+
+      btnsDiv.appendChild(editBtn);
+      btnsDiv.appendChild(deleteBtn);
+
+      // Assemble list item
+      li.appendChild(checkbox);
+      li.appendChild(span);
+      li.appendChild(btnsDiv);
+
+      taskList.appendChild(li);
+      taskInput.value = '';
+    });
+  </script>
+</body>
+</html>
