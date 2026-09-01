@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gym Admission Form & Receipt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 20px;
+        }
+        .form-container {
+            background-color: #fff;
+            padding: 20px;
+            max-width: 500px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Receipt Styling */
+        .receipt-container {
+            background-color: #fff;
+            padding: 30px;
+            max-width: 450px;
+            margin: 30px auto;
+            border-radius: 8px;
+            border: 2px dashed #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        .receipt-header {
+            text-align: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .receipt-header h3 {
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 15px;
+            border-bottom: 1px dotted #ccc;
+            padding-bottom: 5px;
+        }
+        .receipt-row strong {
+            color: #555;
+        }
+        .receipt-footer {
+            text-align: center;
+            margin-top: 25px;
+            font-style: italic;
+            color: #777;
+            font-size: 14px;
+        }
+        .print-btn {
+            background-color: #008CBA;
+            margin-top: 15px;
+        }
+        .print-btn:hover {
+            background-color: #007bb5;
+        }
+
+        /* Print target settings */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .receipt-container, .receipt-container * {
+                visibility: visible;
+            }
+            .receipt-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                border: none;
+            }
+            .print-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Admission Form -->
+    <div class="form-container" id="formBox">
+        <h2>Gym Admission Form</h2>
+        <form id="gymForm">
+            <label for="fullName">Full Name:</label>
+            <input type="text" id="fullName" name="fullName" placeholder="Enter full name" />
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter email address" />
+
+            <label for="mobile">Mobile Number:</label>
+            <input type="text" id="mobile" name="mobile" placeholder="10-digit mobile number" />
+
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" placeholder="Enter age" />
+
+            <label for="plan">Membership Plan:</label>
+            <select id="plan" name="plan">
+                <option value="">Select Plan</option>
+                <option value="Monthly">Monthly Pack</option>
+                <option value="Quarterly">Quarterly Pack</option>
+                <option value="Yearly">Yearly Pack</option>
+            </select>
+
+            <button type="submit">Submit & Generate Receipt</button>
+            <div class="error" id="errorMsg"></div>
+        </form>
+    </div>
+
+    <!-- Receipt Display -->
+    <div class="receipt-container" id="receiptContainer" style="display:none;">
+        <div class="receipt-header">
+            <h3>FITNESS CLUB RECEIPT</h3>
+            <p style="margin: 5px 0 0 0; font-size: 13px; color: #666;">Health & Strength Center</p>
+        </div>
+        
+        <div id="receiptDetails"></div>
+        
+        <div class="receipt-footer">
+            <p>Thank you for joining our Gym!<br>No Pain, No Gain.</p>
+            <button class="print-btn" onclick="window.print()">Print Receipt</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('gymForm').addEventListener('submit', function(e){
+            e.preventDefault();
+            
+            // Clear previous error message
+            document.getElementById('errorMsg').textContent = '';
+            
+            // Get form values
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const mobile = document.getElementById('mobile').value.trim();
+            const age = document.getElementById('age').value.trim();
+            const plan = document.getElementById('plan').value;
+
+            // Validation
+            if(fullName.length < 1 || fullName.length > 50){
+                document.getElementById('errorMsg').textContent = 'Please enter a valid full name.';
+                return;
+            }
+            if(!validateEmail(email)){
+                document.getElementById('errorMsg').textContent = 'Please enter a valid email.';
+                return;
+            }
+            if(!validateMobile(mobile)){
+                document.getElementById('errorMsg').textContent = 'Please enter a valid 10-digit mobile number.';
+                return;
+            }
+            if(age < 1 || age > 120){
+                document.getElementById('errorMsg').textContent = 'Please enter a valid age.';
+                return;
+            }
+            if(plan === ''){
+                document.getElementById('errorMsg').textContent = 'Please select a membership plan.';
+                return;
+            }
+
+            // Generate Random Receipt Number and Current Date
+            const receiptNo = 'GYM' + Math.floor(100000 + Math.random() * 900000);
+            const currentDate = new Date().toLocaleString();
+
+            // Insert details into receipt layout
+            const receiptDetailsDiv = document.getElementById('receiptDetails');
+            receiptDetailsDiv.innerHTML = `
+                <div class="receipt-row"><strong>Receipt No:</strong> <span>${receiptNo}</span></div>
+                <div class="receipt-row"><strong>Date & Time:</strong> <span>${currentDate}</span></div>
+                <div class="receipt-row"><strong>Member Name:</strong> <span>${fullName}</span></div>
+                <div class="receipt-row"><strong>Email:</strong> <span>${email}</span></div>
+                <div class="receipt-row"><strong>Mobile:</strong> <span>${mobile}</span></div>
+                <div class="receipt-row"><strong>Age:</strong> <span>${age} Years</span></div>
+                <div class="receipt-row"><strong>Selected Plan:</strong> <span style="font-weight: bold; color: #4CAF50;">${plan}</span></div>
+                <div class="receipt-row"><strong>Status:</strong> <span style="color: green; font-weight: bold;">PAID</span></div>
+            `;
+
+            // Display the receipt container
+            document.getElementById('receiptContainer').style.display = 'block';
+            
+            // Smooth scroll to receipt
+            document.getElementById('receiptContainer').scrollIntoView({ behavior: 'smooth' });
+
+            alert('Form submitted and receipt generated successfully!');
+            
+            // Reset form fields
+            document.getElementById('gymForm').reset();
+        });
+
+        function validateEmail(email){
+            // Standard regex fixing the double backslash issue from string conversion
+            const re = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+            return re.test(email);
+        }
+
+        function validateMobile(mobile){
+            const re = /^[0-9]{10}$/;
+            return re.test(mobile);
+        }
+    </script>
+</body>
+</html>
