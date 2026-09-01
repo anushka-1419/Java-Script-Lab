@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Handling Case Study</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .form-container {
+            background-color: white;
+            border: 1px solid #ccc;
+            width: 480px;
+            padding: 20px;
+            margin: 0 auto;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+        }
+        .mandatory-note {
+            color: red;
+            font-size: 0.9rem;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            width: 120px;
+            font-size: 0.95rem;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: 220px;
+            padding: 4px 6px;
+            border: 1px solid #767676;
+            outline: none;
+        }
+        /* Highlight input on focus event */
+        .form-group input:focus, .form-group select:focus {
+            border: 1.5px solid #0056b3;
+            background-color: #f7faff;
+        }
+        .dob-selects {
+            display: flex;
+            gap: 5px;
+        }
+        .dob-selects select {
+            padding: 3px;
+        }
+        .required-star {
+            color: red;
+            margin-left: 5px;
+        }
+        .terms-group {
+            margin-left: 120px;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+        }
+        .terms-group input {
+            margin-right: 8px;
+        }
+        .btn-group {
+            margin-left: 120px;
+        }
+        input[type="submit"] {
+            padding: 4px 12px;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        .error-message {
+            color: red;
+            font-size: 0.85rem;
+            margin-left: 120px;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <div class="mandatory-note">*Mandatory to fill</div>
+        
+        <form id="registrationForm" novalidate>
+            <!-- Firstname -->
+            <div class="form-group">
+                <label for="firstname">Firstname:</label>
+                <input type="text" id="firstname">
+                <span class="required-star">*</span>
+            </div>
+            
+            <!-- Lastname -->
+            <div class="form-group">
+                <label for="lastname">Lastname:</label>
+                <input type="text" id="lastname">
+                <span class="required-star">*</span>
+            </div>
+            
+            <!-- Birthday -->
+            <div class="form-group">
+                <label>Birthday:</label>
+                <div class="dob-selects">
+                    <select id="dobDay">
+                        <option value="">Day</option>
+                        <!-- Dynamic options generated via JS -->
+                    </select>
+                    <select id="dobMonth">
+                        <option value="">Month</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
+                    </select>
+                    <select id="dobYear">
+                        <option value="">Year</option>
+                        <!-- Dynamic options generated via JS -->
+                    </select>
+                </div>
+                <span class="required-star">*</span>
+            </div>
+            
+            <!-- Username -->
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username">
+                <span class="required-star">*</span>
+            </div>
+            
+            <!-- E-mail -->
+            <div class="form-group">
+                <label for="email">E-mail:</label>
+                <input type="text" id="email">
+                <span class="required-star">*</span>
+            </div>
+            <div class="error-message" id="emailError">Please enter a valid email address.</div>
+            
+            <!-- Website -->
+            <div class="form-group">
+                <label for="website">Website:</label>
+                <input type="text" id="website">
+                <span class="required-star">*</span>
+            </div>
+            
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password">
+                <span class="required-star">*</span>
+            </div>
+            
+            <!-- Re-password -->
+            <div class="form-group">
+                <label for="repassword">Re-password:</label>
+                <input type="password" id="repassword">
+                <span class="required-star">*</span>
+            </div>
+            <div class="error-message" id="passwordError">Passwords do not match!</div>
+            
+            <!-- Terms Checkbox -->
+            <div class="terms-group">
+                <input type="checkbox" id="terms">
+                <label for="terms">I agree to the terms & conditions.</label>
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="btn-group">
+                <input type="submit" value="Sign up">
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // --- 1. Populate Dropdowns (DOM Manipulation) ---
+        const daySelect = document.getElementById('dobDay');
+        const yearSelect = document.getElementById('dobYear');
+
+        for (let i = 1; i <= 31; i++) {
+            let opt = document.createElement('option');
+            opt.value = i;
+            opt.innerHTML = i;
+            daySelect.appendChild(opt);
+        }
+
+        const currentYear = new Date().getFullYear();
+        for (let i = currentYear; i >= currentYear - 100; i--) {
+            let opt = document.createElement('option');
+            opt.value = i;
+            opt.innerHTML = i;
+            yearSelect.appendChild(opt);
+        }
+
+        // --- 2. Form Event Listeners & Validation Logic ---
+        const form = document.getElementById('registrationForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const repasswordInput = document.getElementById('repassword');
+        
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+
+        // Event: 'focus' and 'blur' on all input elements to show handling state changes
+        const allInputs = form.querySelectorAll('input[type="text"], input[type="password"], select');
+        allInputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                // Background properties modified inside the CSS block matching focus selectors
+            });
+        });
+
+        // Event: 'change' event tracking real-time validation for password matching
+        repasswordInput.addEventListener('change', function() {
+            if (passwordInput.value !== repasswordInput.value) {
+                passwordError.style.display = 'block';
+            } else {
+                passwordError.style.display = 'none';
+            }
+        });
+
+        // Event: 'submit' event logic
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Stop form submission for verification
+            
+            let hasError = false;
+            
+            // a) Empty Fields Validation check
+            const mandatoryFields = [
+                document.getElementById('firstname'),
+                document.getElementById('lastname'),
+                document.getElementById('username'),
+                emailInput,
+                document.getElementById('website'),
+                passwordInput,
+                repasswordInput,
+                daySelect,
+                document.getElementById('dobMonth'),
+                yearSelect
+            ];
+
+            let emptyFound = false;
+            mandatoryFields.forEach(field => {
+                if (field.value.trim() === "") {
+                    emptyFound = true;
+                    field.style.border = "1.5px solid red";
+                } else {
+                    field.style.border = "1px solid #767676";
+                }
+            });
+
+            if (emptyFound) {
+                alert("Please fill out all mandatory fields highlighted in red.");
+                hasError = true;
+            }
+
+            // b) Email Pattern Regex Validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (emailInput.value.trim() !== "" && !emailRegex.test(emailInput.value)) {
+                emailError.style.display = 'block';
+                hasError = true;
+            } else {
+                emailError.style.display = 'none';
+            }
+
+            // c) Password Mismatch Verification check
+            if (passwordInput.value !== repasswordInput.value) {
+                passwordError.style.display = 'block';
+                hasError = true;
+            } else {
+                passwordError.style.display = 'none';
+            }
+
+            // d) Terms Agreement Validation Check
+            const termsCheckbox = document.getElementById('terms');
+            if (!termsCheckbox.checked) {
+                alert("You must agree to the terms and conditions to sign up.");
+                hasError = true;
+            }
+
+            // Success Execution Pipeline Trigger
+            if (!hasError) {
+                alert("Form submitted successfully!");
+                form.reset();
+                // Reset styling frames
+                mandatoryFields.forEach(field => field.style.border = "1px solid #767676");
+            }
+        });
+    </script>
+</body>
+</html>
