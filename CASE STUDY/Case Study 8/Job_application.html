@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Northstar | Career Application</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+:root{
+    --bg:#f5f7fb;
+    --card:#ffffff;
+    --text:#172033;
+    --muted:#697386;
+    --primary:#635bff;
+    --primary-dark:#4b44d9;
+    --soft:#eeecff;
+    --border:#e1e5ee;
+    --danger:#e05252;
+    --success:#20966b;
+}
+
+body{
+    font-family:'DM Sans',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    transition:.3s;
+}
+
+body.dark{
+    --bg:#11131a;
+    --card:#1b1e27;
+    --text:#f5f7ff;
+    --muted:#9da5b8;
+    --border:#303542;
+    --soft:#29254c;
+}
+
+/* ================= HEADER ================= */
+
+header{
+    width:100%;
+    padding:20px 6%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid var(--border);
+    background:var(--card);
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Space Grotesk';
+    font-weight:700;
+    font-size:20px;
+}
+
+.logo-icon{
+    width:36px;
+    height:36px;
+    display:grid;
+    place-items:center;
+    border-radius:11px;
+    background:var(--primary);
+    color:white;
+}
+
+.header-right{
+    display:flex;
+    align-items:center;
+    gap:20px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.theme-btn{
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:18px;
+}
+
+/* ================= MAIN ================= */
+
+.container{
+    max-width:1150px;
+    margin:45px auto;
+    padding:0 25px;
+}
+
+.hero{
+    margin-bottom:35px;
+}
+
+.badge{
+    display:inline-block;
+    padding:7px 13px;
+    border-radius:20px;
+    background:var(--soft);
+    color:var(--primary);
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:15px;
+}
+
+.hero h1{
+    font-family:'Space Grotesk';
+    font-size:clamp(35px,5vw,58px);
+    line-height:1;
+    margin-bottom:15px;
+}
+
+.hero p{
+    color:var(--muted);
+    max-width:650px;
+    line-height:1.6;
+}
+
+/* ================= PROGRESS ================= */
+
+.progress-box{
+    margin-bottom:25px;
+}
+
+.progress-info{
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
+    color:var(--muted);
+    margin-bottom:8px;
+}
+
+.progress{
+    height:7px;
+    background:var(--border);
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    width:25%;
+    height:100%;
+    background:var(--primary);
+    transition:.4s;
+}
+
+/* ================= STEPS ================= */
+
+.steps{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:25px;
+}
+
+.step{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--muted);
+    font-size:13px;
+}
+
+.step-number{
+    width:28px;
+    height:28px;
+    border:1px solid var(--border);
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:var(--card);
+}
+
+.step.active{
+    color:var(--primary);
+    font-weight:700;
+}
+
+.step.active .step-number{
+    background:var(--primary);
+    color:white;
+    border-color:var(--primary);
+}
+
+/* ================= FORM CARD ================= */
+
+.form-card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:38px;
+    box-shadow:0 15px 50px rgba(0,0,0,.05);
+}
+
+.form-step{
+    display:none;
+}
+
+.form-step.active{
+    display:block;
+    animation:slide .35s ease;
+}
+
+@keyframes slide{
+    from{
+        opacity:0;
+        transform:translateX(15px);
+    }
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+}
+
+.section-title{
+    font-family:'Space Grotesk';
+    font-size:25px;
+    margin-bottom:7px;
+}
+
+.section-description{
+    color:var(--muted);
+    font-size:14px;
+    margin-bottom:28px;
+}
+
+/* ================= INPUTS ================= */
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+label{
+    font-size:13px;
+    font-weight:700;
+}
+
+input,
+textarea{
+    width:100%;
+    padding:14px;
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:transparent;
+    color:var(--text);
+    font:inherit;
+    outline:none;
+    transition:.2s;
+}
+
+textarea{
+    min-height:120px;
+    resize:vertical;
+}
+
+input:focus,
+textarea:focus{
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(99,91,255,.12);
+}
+
+input.valid{
+    border-color:var(--success);
+}
+
+input.invalid{
+    border-color:var(--danger);
+}
+
+.error{
+    color:var(--danger);
+    font-size:11px;
+    display:none;
+}
+
+.field.invalid .error{
+    display:block;
+}
+
+/* ================= ROLE CARDS ================= */
+
+.role-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.role-card{
+    padding:20px;
+    border:1px solid var(--border);
+    border-radius:14px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.role-card:hover{
+    transform:translateY(-3px);
+    border-color:var(--primary);
+}
+
+.role-card.selected{
+    background:var(--soft);
+    border-color:var(--primary);
+}
+
+.role-icon{
+    font-size:25px;
+    margin-bottom:12px;
+}
+
+.role-card h3{
+    font-size:15px;
+    margin-bottom:5px;
+}
+
+.role-card p{
+    color:var(--muted);
+    font-size:12px;
+}
+
+input[type="radio"]{
+    display:none;
+}
+
+/* ================= EXPERIENCE ================= */
+
+.exp-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+.exp-card{
+    padding:18px 10px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    text-align:center;
+    cursor:pointer;
+    font-size:13px;
+}
+
+.exp-card.selected{
+    background:var(--soft);
+    border-color:var(--primary);
+    color:var(--primary);
+    font-weight:700;
+}
+
+/* ================= SKILLS ================= */
+
+.skill-input{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    padding:10px;
+    border:1px solid var(--border);
+    border-radius:10px;
+}
+
+.skill-input input{
+    border:0;
+    box-shadow:none;
+    flex:1;
+    min-width:130px;
+    padding:7px;
+}
+
+.skill{
+    background:var(--soft);
+    color:var(--primary);
+    padding:7px 10px;
+    border-radius:20px;
+    font-size:12px;
+    display:flex;
+    gap:7px;
+    align-items:center;
+}
+
+.skill span{
+    cursor:pointer;
+    font-weight:bold;
+}
+
+/* ================= UPLOAD ================= */
+
+.upload{
+    border:2px dashed var(--border);
+    padding:35px;
+    border-radius:14px;
+    text-align:center;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.upload:hover{
+    border-color:var(--primary);
+    background:var(--soft);
+}
+
+.upload-icon{
+    font-size:35px;
+    margin-bottom:10px;
+}
+
+.upload p{
+    color:var(--muted);
+    font-size:13px;
+}
+
+#resume{
+    display:none;
+}
+
+/* ================= WORK CARDS ================= */
+
+.preference-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.preference{
+    border:1px solid var(--border);
+    padding:20px;
+    border-radius:14px;
+    text-align:center;
+    cursor:pointer;
+}
+
+.preference.selected{
+    border-color:var(--primary);
+    background:var(--soft);
+}
+
+.preference .emoji{
+    font-size:28px;
+    margin-bottom:10px;
+}
+
+/* ================= REVIEW ================= */
+
+.review{
+    display:grid;
+    gap:12px;
+}
+
+.review-item{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    padding:14px;
+    background:var(--bg);
+    border-radius:10px;
+    font-size:13px;
+}
+
+.review-item span:first-child{
+    color:var(--muted);
+}
+
+/* ================= BUTTONS ================= */
+
+.buttons{
+    display:flex;
+    justify-content:space-between;
+    margin-top:35px;
+    padding-top:25px;
+    border-top:1px solid var(--border);
+}
+
+button{
+    font-family:inherit;
+}
+
+.next,
+.submit{
+    background:var(--primary);
+    color:white;
+    border:0;
+    padding:13px 23px;
+    border-radius:9px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.next:hover,
+.submit:hover{
+    background:var(--primary-dark);
+}
+
+.back{
+    background:transparent;
+    border:1px solid var(--border);
+    color:var(--text);
+    padding:13px 23px;
+    border-radius:9px;
+    cursor:pointer;
+}
+
+/* ================= SUCCESS ================= */
+
+.success{
+    display:none;
+    text-align:center;
+    padding:70px 20px;
+}
+
+.success.show{
+    display:block;
+    animation:pop .5s ease;
+}
+
+@keyframes pop{
+    from{
+        opacity:0;
+        transform:scale(.8);
+    }
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+.success-icon{
+    width:80px;
+    height:80px;
+    margin:auto auto 20px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:#d9f5e9;
+    color:var(--success);
+    font-size:40px;
+}
+
+.success h2{
+    font-family:'Space Grotesk';
+    font-size:30px;
+    margin-bottom:10px;
+}
+
+.success p{
+    color:var(--muted);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:700px){
+
+    .container{
+        margin:25px auto;
+    }
+
+    .form-card{
+        padding:23px;
+    }
+
+    .grid,
+    .role-grid{
+        grid-template-columns:1fr;
+    }
+
+    .full{
+        grid-column:auto;
+    }
+
+    .exp-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .preference-grid{
+        grid-template-columns:1fr;
+    }
+
+    .step span{
+        display:none;
+    }
+
+    .header-right small{
+        display:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        <div class="logo-icon">N</div>
+        NORTHSTAR
+    </div>
+
+    <div class="header-right">
+        <small>Build your next chapter.</small>
+        <button class="theme-btn" id="themeBtn">☾</button>
+    </div>
+
+</header>
+
+
+<div class="container">
+
+    <div class="hero">
+
+        <span class="badge">CAREERS 2026</span>
+
+        <h1>Let's build<br>something meaningful.</h1>
+
+        <p>
+            We're looking for curious people who enjoy solving difficult
+            problems, learning quickly and creating work that matters.
+        </p>
+
+    </div>
+
+
+    <!-- PROGRESS -->
+
+    <div class="progress-box">
+
+        <div class="progress-info">
+            <span id="progressText">Step 1 of 4</span>
+            <span id="progressPercent">25%</span>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+    </div>
+
+
+    <!-- STEPS -->
+
+    <div class="steps">
+
+        <div class="step active" data-step="1">
+            <div class="step-number">1</div>
+            <span>About you</span>
+        </div>
+
+        <div class="step" data-step="2">
+            <div class="step-number">2</div>
+            <span>Your role</span>
+        </div>
+
+        <div class="step" data-step="3">
+            <div class="step-number">3</div>
+            <span>Your skills</span>
+        </div>
+
+        <div class="step" data-step="4">
+            <div class="step-number">4</div>
+            <span>Review</span>
+        </div>
+
+    </div>
+
+
+    <!-- FORM -->
+
+    <div class="form-card">
+
+        <form id="applicationForm">
+
+
+            <!-- STEP 1 -->
+
+            <div class="form-step active" data-form="1">
+
+                <h2 class="section-title">Tell us about yourself</h2>
+
+                <p class="section-description">
+                    Start with some basic information so we know who we're speaking with.
+                </p>
+
+                <div class="grid">
+
+                    <div class="field">
+                        <label>First name *</label>
+                        <input type="text" id="firstName" placeholder="Alex" required>
+                        <small class="error">Please enter your first name.</small>
+                    </div>
+
+                    <div class="field">
+                        <label>Last name *</label>
+                        <input type="text" id="lastName" placeholder="Morgan" required>
+                        <small class="error">Please enter your last name.</small>
+                    </div>
+
+                    <div class="field">
+                        <label>Email address *</label>
+                        <input type="email" id="email" placeholder="alex@example.com" required>
+                        <small class="error">Enter a valid email address.</small>
+                    </div>
+
+                    <div class="field">
+                        <label>Phone number</label>
+                        <input type="tel" id="phone" placeholder="+91 98765 43210">
+                    </div>
+
+                    <div class="field full">
+                        <label>Current city *</label>
+                        <input type="text" id="location" placeholder="Nagpur, India" required>
+                        <small class="error">Please enter your city.</small>
+                    </div>
+
+                </div>
+
+                <div class="buttons">
+                    <span></span>
+                    <button type="button" class="next">Continue →</button>
+                </div>
+
+            </div>
+
+
+            <!-- STEP 2 -->
+
+            <div class="form-step" data-form="2">
+
+                <h2 class="section-title">Find your place</h2>
+
+                <p class="section-description">
+                    Choose the role that feels closest to what you want to build.
+                </p>
+
+
+                <label>What role are you applying for? *</label>
+
+                <br><br>
+
+                <div class="role-grid">
+
+                    <label class="role-card">
+                        <input type="radio" name="role" value="Product Designer">
+                        <div class="role-icon">🎨</div>
+                        <h3>Product Designer</h3>
+                        <p>Design experiences people love.</p>
+                    </label>
+
+                    <label class="role-card">
+                        <input type="radio" name="role" value="Software Engineer">
+                        <div class="role-icon">💻</div>
+                        <h3>Software Engineer</h3>
+                        <p>Build scalable digital products.</p>
+                    </label>
+
+                    <label class="role-card">
+                        <input type="radio" name="role" value="Marketing">
+                        <div class="role-icon">📈</div>
+                        <h3>Marketing</h3>
+                        <p>Turn ideas into growth.</p>
+                    </label>
+
+                    <label class="role-card">
+                        <input type="radio" name="role" value="Customer Success">
+                        <div class="role-icon">🤝</div>
+                        <h3>Customer Success</h3>
+                        <p>Help customers achieve more.</p>
+                    </label>
+
+                </div>
+
+
+                <br><br>
+
+                <label>Years of experience *</label>
+
+                <br><br>
+
+                <div class="exp-grid">
+
+                    <div class="exp-card">0–1 years</div>
+                    <div class="exp-card">2–4 years</div>
+                    <div class="exp-card">5–8 years</div>
+                    <div class="exp-card">9+ years</div>
+
+                </div>
+
+
+                <div class="buttons">
+
+                    <button type="button" class="back">← Back</button>
+
+                    <button type="button" class="next">Continue →</button>
+
+                </div>
+
+            </div>
+
+
+            <!-- STEP 3 -->
+
+            <div class="form-step" data-form="3">
+
+                <h2 class="section-title">Show us what you bring</h2>
+
+                <p class="section-description">
+                    Add your skills and upload your latest resume.
+                </p>
+
+
+                <div class="field">
+
+                    <label>Technical / professional skills *</label>
+
+                    <div class="skill-input" id="skillBox">
+
+                        <input
+                            type="text"
+                            id="skillInput"
+                            placeholder="Type a skill and press Enter"
+                        >
+
+                    </div>
+
+                    <small class="error" id="skillError">
+                        Add at least one skill.
+                    </small>
+
+                </div>
+
+
+                <br>
+
+
+                <div class="field">
+
+                    <label>Resume / CV *</label>
+
+                    <label class="upload" for="resume">
+
+                        <div class="upload-icon">📄</div>
+
+                        <strong id="uploadText">
+                            Drop your resume here
+                        </strong>
+
+                        <p>
+                            or click to browse · PDF, DOC, DOCX · Max 10 MB
+                        </p>
+
+                    </label>
+
+                    <input
+                        type="file"
+                        id="resume"
+                        accept=".pdf,.doc,.docx"
+                    >
+
+                </div>
+
+
+                <br>
+
+
+                <div class="grid">
+
+                    <div class="field">
+
+                        <label>Portfolio / LinkedIn</label>
+
+                        <input
+                            type="url"
+                            id="portfolio"
+                            placeholder="https://linkedin.com/in/..."
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>Earliest start date *</label>
+
+                        <input
+                            type="date"
+                            id="startDate"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <br>
+
+
+                <div class="field">
+
+                    <label>Why do you want to join Northstar? *</label>
+
+                    <textarea
+                        id="motivation"
+                        placeholder="Tell us what excites you about this opportunity..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+                <div class="buttons">
+
+                    <button type="button" class="back">← Back</button>
+
+                    <button type="button" class="next">Continue →</button>
+
+                </div>
+
+            </div>
+
+
+            <!-- STEP 4 -->
+
+            <div class="form-step" data-form="4">
+
+                <h2 class="section-title">Almost there.</h2>
+
+                <p class="section-description">
+                    Review your application before sending it to our team.
+                </p>
+
+
+                <div class="review">
+
+                    <div class="review-item">
+                        <span>Name</span>
+                        <strong id="reviewName">—</strong>
+                    </div>
+
+                    <div class="review-item">
+                        <span>Email</span>
+                        <strong id="reviewEmail">—</strong>
+                    </div>
+
+                    <div class="review-item">
+                        <span>Location</span>
+                        <strong id="reviewLocation">—</strong>
+                    </div>
+
+                    <div class="review-item">
+                        <span>Role</span>
+                        <strong id="reviewRole">—</strong>
+                    </div>
+
+                    <div class="review-item">
+                        <span>Experience</span>
+                        <strong id="reviewExperience">—</strong>
+                    </div>
+
+                    <div class="review-item">
+                        <span>Skills</span>
+                        <strong id="reviewSkills">—</strong>
+                    </div>
+
+                    <div class="review-item">
+                        <span>Resume</span>
+                        <strong id="reviewResume">—</strong>
+                    </div>
+
+                </div>
+
+
+                <br><br>
+
+                <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400">
+
+                    <input
+                        type="checkbox"
+                        id="consent"
+                        style="width:auto;margin-top:3px"
+                    >
+
+                    I confirm that the information provided is accurate and
+                    I consent to its use for recruitment purposes.
+
+                </label>
+
+
+                <div class="buttons">
+
+                    <button type="button" class="back">← Back</button>
+
+                    <button type="submit" class="submit">
+                        Submit application ✦
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+
+        <!-- SUCCESS -->
+
+        <div class="success" id="success">
+
+            <div class="success-icon">✓</div>
+
+            <h2>Application submitted!</h2>
+
+            <p>
+                Thanks for sharing your story.
+                Our team will review your application and get back to you.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ================= VARIABLES ================= */
+
+let currentStep = 1;
+
+const totalSteps = 4;
+
+const form = document.getElementById("applicationForm");
+
+const steps = document.querySelectorAll(".form-step");
+
+const stepIndicators = document.querySelectorAll(".step");
+
+const progressBar = document.getElementById("progressBar");
+
+const progressText = document.getElementById("progressText");
+
+const progressPercent = document.getElementById("progressPercent");
+
+
+/* ================= UPDATE STEP ================= */
+
+function showStep(step){
+
+    currentStep = step;
+
+    steps.forEach(s => {
+
+        s.classList.remove("active");
+
+        if(Number(s.dataset.form) === step){
+            s.classList.add("active");
+        }
+
+    });
+
+
+    stepIndicators.forEach(s => {
+
+        s.classList.remove("active");
+
+        if(Number(s.dataset.step) <= step){
+            s.classList.add("active");
+        }
+
+    });
+
+
+    const percent = step * 25;
+
+    progressBar.style.width = percent + "%";
+
+    progressText.textContent = `Step ${step} of ${totalSteps}`;
+
+    progressPercent.textContent = percent + "%";
+
+}
+
+
+/* ================= VALIDATION ================= */
+
+function validateStep(){
+
+    if(currentStep === 1){
+
+        const required = [
+            "firstName",
+            "lastName",
+            "email",
+            "location"
+        ];
+
+        let valid = true;
+
+        required.forEach(id => {
+
+            const input = document.getElementById(id);
+            const field = input.parentElement;
+
+            if(!input.value.trim() || !input.checkValidity()){
+
+                field.classList.add("invalid");
+                valid = false;
+
+            }else{
+
+                field.classList.remove("invalid");
+                input.classList.add("valid");
+
+            }
+
+        });
+
+        return valid;
+    }
+
+
+    if(currentStep === 2){
+
+        const role = document.querySelector('input[name="role"]:checked');
+
+        const experience =
+            document.querySelector(".exp-card.selected");
+
+        if(!role){
+
+            alert("Please select a role.");
+
+            return false;
+        }
+
+        if(!experience){
+
+            alert("Please select your experience.");
+
+            return false;
+        }
+
+        return true;
+    }
+
+
+    if(currentStep === 3){
+
+        if(skills.length === 0){
+
+            document.getElementById("skillError").style.display="block";
+
+            return false;
+
+        }
+
+        document.getElementById("skillError").style.display="none";
+
+
+        const resume =
+            document.getElementById("resume");
+
+        if(!resume.files.length){
+
+            alert("Please upload your resume.");
+
+            return false;
+
+        }
+
+
+        const motivation =
+            document.getElementById("motivation");
+
+        if(!motivation.value.trim()){
+
+            alert("Please tell us why you want to join Northstar.");
+
+            return false;
+
+        }
+
+        return true;
+    }
+
+    return true;
+}
+
+
+/* ================= NEXT BUTTON ================= */
+
+document.querySelectorAll(".next").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        if(validateStep()){
+
+            if(currentStep < totalSteps){
+
+                if(currentStep === 3){
+
+                    updateReview();
+
+                }
+
+                showStep(currentStep + 1);
+
+            }
+
+        }
+
+    });
+
+});
+
+
+/* ================= BACK BUTTON ================= */
+
+document.querySelectorAll(".back").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        if(currentStep > 1){
+
+            showStep(currentStep - 1);
+
+        }
+
+    });
+
+});
+
+
+/* ================= ROLE SELECTION ================= */
+
+document.querySelectorAll(".role-card").forEach(card => {
+
+    card.addEventListener("click", () => {
+
+        document.querySelectorAll(".role-card")
+            .forEach(c => c.classList.remove("selected"));
+
+        card.classList.add("selected");
+
+    });
+
+});
+
+
+/* ================= EXPERIENCE ================= */
+
+document.querySelectorAll(".exp-card").forEach(card => {
+
+    card.addEventListener("click", () => {
+
+        document.querySelectorAll(".exp-card")
+            .forEach(c => c.classList.remove("selected"));
+
+        card.classList.add("selected");
+
+    });
+
+});
+
+
+/* ================= SKILLS ================= */
+
+const skillInput =
+    document.getElementById("skillInput");
+
+const skillBox =
+    document.getElementById("skillBox");
+
+let skills = [];
+
+
+skillInput.addEventListener("keydown", function(event){
+
+    if(event.key === "Enter"){
+
+        event.preventDefault();
+
+        const value = skillInput.value.trim();
+
+        if(value && !skills.includes(value)){
+
+            skills.push(value);
+
+            createSkill(value);
+
+        }
+
+        skillInput.value = "";
+
+    }
+
+});
+
+
+function createSkill(value){
+
+    const skill = document.createElement("div");
+
+    skill.className = "skill";
+
+    skill.innerHTML = `
+        ${value}
+        <span>×</span>
+    `;
+
+
+    skill.querySelector("span").onclick = () => {
+
+        skills = skills.filter(s => s !== value);
+
+        skill.remove();
+
+    };
+
+
+    skillBox.insertBefore(skill, skillInput);
+
+}
+
+
+/* ================= FILE UPLOAD ================= */
+
+const resume =
+    document.getElementById("resume");
+
+const uploadText =
+    document.getElementById("uploadText");
+
+
+resume.addEventListener("change", () => {
+
+    if(resume.files.length){
+
+        const file = resume.files[0];
+
+        const sizeMB = file.size / (1024 * 1024);
+
+        if(sizeMB > 10){
+
+            alert("File size must be below 10 MB.");
+
+            resume.value = "";
+
+            uploadText.textContent =
+                "Drop your resume here";
+
+            return;
+
+        }
+
+        uploadText.textContent =
+            "✓ " + file.name;
+
+    }
+
+});
+
+
+/* ================= REVIEW ================= */
+
+function updateReview(){
+
+    document.getElementById("reviewName").textContent =
+        document.getElementById("firstName").value +
+        " " +
+        document.getElementById("lastName").value;
+
+
+    document.getElementById("reviewEmail").textContent =
+        document.getElementById("email").value;
+
+
+    document.getElementById("reviewLocation").textContent =
+        document.getElementById("location").value;
+
+
+    const role =
+        document.querySelector('input[name="role"]:checked');
+
+    document.getElementById("reviewRole").textContent =
+        role ? role.value : "—";
+
+
+    const experience =
+        document.querySelector(".exp-card.selected");
+
+    document.getElementById("reviewExperience").textContent =
+        experience ? experience.textContent : "—";
+
+
+    document.getElementById("reviewSkills").textContent =
+        skills.length ? skills.join(", ") : "—";
+
+
+    const file =
+        document.getElementById("resume").files[0];
+
+    document.getElementById("reviewResume").textContent =
+        file ? file.name : "—";
+
+}
+
+
+/* ================= SUBMIT ================= */
+
+form.addEventListener("submit", function(event){
+
+    event.preventDefault();
+
+
+    if(!document.getElementById("consent").checked){
+
+        alert("Please accept the consent statement.");
+
+        return;
+
+    }
+
+
+    form.style.display = "none";
+
+    document.querySelector(".steps").style.display = "none";
+
+    document.querySelector(".progress-box").style.display = "none";
+
+    document.getElementById("success").classList.add("show");
+
+});
+
+
+/* ================= DARK MODE ================= */
+
+document.getElementById("themeBtn")
+.addEventListener("click", () => {
+
+    document.body.classList.toggle("dark");
+
+    const button =
+        document.getElementById("themeBtn");
+
+    button.textContent =
+        document.body.classList.contains("dark")
+        ? "☀"
+        : "☾";
+
+});
+
+</script>
+
+</body>
+</html>
