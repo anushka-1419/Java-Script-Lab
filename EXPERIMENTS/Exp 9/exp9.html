@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Settings Demo</title>
+    <style>
+        /* Base Variables and Layout */
+        :root {
+            --bg-color: #eef2f7;
+            --text-color: #1e293b;
+            --card-bg: #ffffff;
+            --button-bg: #f1f5f9;
+            --button-text: #0f172a;
+            --button-border: #cbd5e1;
+            --border-color: #cbd5e1;
+            --accent-color: #3b82f6;
+        }
+
+        /* Dark Theme Modifiers */
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --text-color: #f8fafc;
+            --card-bg: #1e293b;
+            --button-bg: #334155;
+            --button-text: #f8fafc;
+            --button-border: #475569;
+            --border-color: #475569;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Highly visible layout design matching presentation slides */
+        .theme-card {
+            background-color: var(--card-bg);
+            border: 3px solid var(--border-color);
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 550px; /* Expanded card box width */
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 36px; /* Increased heading text size */
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 20px; /* Increased description layout scale */
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        select {
+            padding: 12px 24px; /* Enlarged selection picker padding */
+            font-size: 18px; /* Increased text within selection box */
+            margin-bottom: 30px;
+            border-radius: 6px;
+            border: 2px solid var(--border-color);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            width: 100%;
+            max-width: 250px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-direction: column; /* Stacked layout for distinct visibility */
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 16px 24px; /* Large clickable target surfaces */
+            font-size: 18px; /* High-readability font formatting */
+            font-weight: 600;
+            border: 2px solid var(--button-border);
+            border-radius: 8px;
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            width: 100%;
+        }
+
+        button:hover {
+            border-color: var(--accent-color);
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        /* Action-specific styling variants */
+        .clear-btn {
+            background-color: transparent;
+            color: #ef4444;
+            border: 2px dashed #f87171;
+            margin-bottom: 25px;
+        }
+
+        .clear-btn:hover {
+            background-color: #fef2f2;
+            border-color: #ef4444;
+        }
+
+        /* Large Status Feedback Text */
+        .status-message {
+            font-size: 18px;
+            font-weight: 600;
+            min-height: 28px;
+            padding: 10px;
+            border-radius: 6px;
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="theme-card">
+        <h2>Theme Settings</h2>
+        <p>Select your preferred theme:</p>
+        
+        <select id="themeSelect">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+        </select>
+
+        <div class="button-group">
+            <button id="saveLocalBtn">Save using localStorage</button>
+            <button id="saveSessionBtn">Save using sessionStorage</button>
+        </div>
+
+        <button id="clearBtn" class="clear-btn">Clear Preferences</button>
+
+        <div id="statusMsg" class="status-message"></div>
+    </div>
+
+    <script>
+        const themeSelect = document.getElementById('themeSelect');
+        const saveLocalBtn = document.getElementById('saveLocalBtn');
+        const saveSessionBtn = document.getElementById('saveSessionBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const statusMsg = document.getElementById('statusMsg');
+
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeSelect.value = 'dark';
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                themeSelect.value = 'light';
+            }
+        }
+
+        // Initialization
+        const savedSessionTheme = sessionStorage.getItem('theme');
+        const savedLocalTheme = localStorage.getItem('theme');
+
+        if (savedSessionTheme) {
+            applyTheme(savedSessionTheme);
+            statusMsg.textContent = "Theme saved using sessionStorage.";
+        } else if (savedLocalTheme) {
+            applyTheme(savedLocalTheme);
+            statusMsg.textContent = "Theme saved using localStorage.";
+        }
+
+        // Dropdown dynamic update
+        themeSelect.addEventListener('change', () => {
+            applyTheme(themeSelect.value);
+        });
+
+        // Local Storage
+        saveLocalBtn.addEventListener('click', () => {
+            const selectedTheme = themeSelect.value;
+            localStorage.setItem('theme', selectedTheme);
+            sessionStorage.removeItem('theme'); 
+            statusMsg.textContent = `Theme saved using localStorage.`;
+        });
+
+        // Session Storage
+        saveSessionBtn.addEventListener('click', () => {
+            const selectedTheme = themeSelect.value;
+            sessionStorage.setItem('theme', selectedTheme);
+            localStorage.removeItem('theme'); 
+            statusMsg.textContent = `Theme saved using sessionStorage.`;
+        });
+
+        // Reset App
+        clearBtn.addEventListener('click', () => {
+            localStorage.removeItem('theme');
+            sessionStorage.removeItem('theme');
+            applyTheme('light');
+            statusMsg.textContent = "Preferences cleared.";
+        });
+    </script>
+</body>
+</html>
