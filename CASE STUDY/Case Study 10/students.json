@@ -1,0 +1,42 @@
+[
+  {
+    "studentName": "Anushka Paliwal",
+    "PRN": "24070521215",
+    "department": "Computer Science",
+    "year": "3rd Year",
+    "eventName": "Tech Fest",
+    "registrationStatus": "Registered"
+  },
+  {
+    "studentName": "Sharwari Butle",
+    "PRN": "24070521228",
+    "department": "Information Technology",
+    "year": "2nd Year",
+    "eventName": "Hackathon",
+    "registrationStatus": "Pending"
+  },
+  {
+    "studentName": "Nandini Durugkar",
+    "PRN": "24070521231",
+    "department": "Artificial Intelligence",
+    "year": "3rd Year",
+    "eventName": "AI Workshop",
+    "registrationStatus": "Registered"
+  },
+  {
+    "studentName": "Rahul Sharma",
+    "PRN": "24070521245",
+    "department": "Computer Science",
+    "year": "4th Year",
+    "eventName": "Coding Contest",
+    "registrationStatus": "Cancelled"
+  },
+  {
+    "studentName": "Priya Patil",
+    "PRN": "24070521256",
+    "department": "Electronics",
+    "year": "2nd Year",
+    "eventName": "Robotics Expo",
+    "registrationStatus": "Pending"
+  }
+]
