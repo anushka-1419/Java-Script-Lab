@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Calculator</title>
+    <style>
+        /* पूरे पेज को सेंटर अライン करने के लिए फ्लेक्सबॉक्स */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* कंटेंट को एक सुंदर कार्ड में रखने के लिए */
+        .main-wrapper {
+            text-align: center;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            max-width: 450px;
+            width: 100%;
+            position: relative;
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        h3 {
+            font-size: 22px;
+            margin-top: 25px;
+            margin-bottom: 20px;
+            color: #111;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
+        }
+
+        /* रसीद के आइटम्स को सेंटर अलाइन करना */
+        .receipt-container {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .bill-item {
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .bold-text {
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 15px;
+            color: #000;
+        }
+
+        /* मॉडर्न और आकर्षक टॉगल बटन */
+        .toggle-container {
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .theme-toggle-btn {
+            background: #e0e0e0;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* प्राइमरी कैलकुलेशन बटन */
+        .btn-calc {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+            width: 100%;
+        }
+
+        .btn-calc:hover {
+            background-color: #0056b3;
+        }
+
+        /* डार्क मोड सीएसएस (Dark Mode Style Changes) */
+        body.dark-mode {
+            background-color: #121212;
+            color: #f4f4f4;
+        }
+        
+        body.dark-mode .main-wrapper {
+            background-color: #1e1e1e;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05);
+        }
+
+        body.dark-mode h2, body.dark-mode h3, body.dark-mode .bold-text {
+            color: #fff;
+        }
+
+        body.dark-mode h3 {
+            border-bottom-color: #333;
+        }
+
+        body.dark-mode .theme-toggle-btn {
+            background: #333;
+            box-shadow: 0 4px 8px rgba(255,255,255,0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- सभी एलिमेंट्स को सेंटर में रखने के लिए मुख्य रैपर -->
+    <div class="main-wrapper">
+        
+        <!-- आकर्षक थीम टॉगल बटन -->
+        <div class="toggle-container">
+            <button id="themeBtn" class="theme-toggle-btn" onclick="toggleTheme()" title="Toggle Light/Dark Mode">☀️</button>
+        </div>
+
+        <h2>Billing Calculator</h2>
+        
+        <!-- रसीद बटन -->
+        <button class="btn-calc" onclick="generateBill()">Generate Receipt</button>
+
+        <!-- इमेज के अनुसार आउटपुट यहाँ दिखेगा -->
+        <div id="receiptOutput" class="receipt-container"></div>
+    </div>
+
+    <script>
+        // डार्क मोड ऑन/ऑफ करने का फंक्शन और लोगो बदलना
+        function toggleTheme() {
+            const body = document.body;
+            const themeBtn = document.getElementById("themeBtn");
+            
+            body.classList.toggle("dark-mode");
+            
+            // लोगो (Icon) को डायनेमिकली चेंज करना
+            if (body.classList.contains("dark-mode")) {
+                themeBtn.textContent = "🌙"; // डार्क मोड में चाँद दिखेगा
+            } else {
+                themeBtn.textContent = "☀️"; // लाइट मोड में सूरज दिखेगा
+            }
+        }
+
+        function generateBill() {
+            // 1. ES6 Const
+            const GST_RATE = 0.18;
+
+            // 2. ES6 Var
+            var customerName = prompt("Enter Customer Name:", "Anushka Paliwal");
+            if (!customerName) return;
+
+            var productName = prompt("Enter Product Name:", "iPhone 17 pro");
+            if (!productName) return;
+
+            var qtyInput = prompt("Enter Quantity:", "4");
+            if (!qtyInput) return;
+            var quantity = Number(qtyInput);
+
+            var priceInput = prompt("Enter Price per Item:", "60000");
+            if (!priceInput) return;
+            var price = Number(priceInput);
+
+            // इनपुट वैलिडेशन
+            if (isNaN(quantity) || quantity <= 0 || isNaN(price) || price <= 0) {
+                alert("Please enter valid positive numbers.");
+                return;
+            }
+
+            // 3. ES6 Let
+            let total = quantity * price;
+            let gstAmount = total * GST_RATE;
+            let finalBill = total + gstAmount;
+
+            // 4. ES6 Object
+            const billDetails = {
+                customer: customerName,
+                product: productName,
+                quantity,
+                price,
+                total,
+                gstAmount,
+                finalBill
+            };
+
+            // 5. ES6 Object Destructuring
+            const { customer, product, total: totalAmt, gstAmount: taxAmt, finalBill: grandTotal } = billDetails;
+
+            // आउटपुट कंटेनर
+            const receiptOutput = document.getElementById("receiptOutput");
+
+            // 6. ES6 Template Literals
+            receiptOutput.innerHTML = `
+                <h3>Billing Receipt</h3>
+                <div class="bill-item">Customer: ${customer}</div>
+                <div class="bill-item">Product: ${product}</div>
+                <div class="bill-item">Quantity: ${quantity}</div>
+                <div class="bill-item">Price per Item: ₹${price}</div>
+                <div class="bill-item">Total: ₹${totalAmt}</div>
+                <div class="bill-item">GST (18%): ₹${taxAmt.toFixed(2)}</div>
+                <div class="bill-item bold-text">Final Bill: ₹${grandTotal.toFixed(2)}</div>
+            `;
+        }
+    </script>
+</body>
+</html>
