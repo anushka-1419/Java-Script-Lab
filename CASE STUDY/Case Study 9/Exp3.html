@@ -1,0 +1,1160 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>International Institute of Technology - Student Grading Portal</title>
+
+    <style>
+        /* ============================================================
+           ORIGINAL STYLING
+           ============================================================ */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            max-width: 550px;
+            width: 100%;
+            transition: max-width 0.4s ease, background-color 0.3s ease;
+        }
+
+        .container.has-report {
+            max-width: 1050px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #111827;
+            margin-bottom: 8px;
+            text-align: center;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        .info-text {
+            font-size: 0.9em;
+            color: #6b7280;
+            margin-bottom: 25px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .app-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            transition: all 0.4s ease;
+        }
+
+        .container.has-report .app-layout {
+            flex-direction: row;
+            gap: 30px;
+        }
+
+        .form-section {
+            flex: 1;
+            width: 100%;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 4px;
+        }
+
+        .form-group input {
+            padding: 10px 14px;
+            font-size: 0.95em;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.2s ease;
+            background-color: #f9fafb;
+            width: 100%;
+        }
+
+        .form-group input:focus {
+            border-color: #3b82f6;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        #subjectsContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .subject-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .subject-row .subj-name {
+            flex: 2;
+        }
+
+        .subject-row .subj-marks {
+            flex: 1;
+        }
+
+        .btn-delete-row {
+            background-color: transparent;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-delete-row:hover {
+            background-color: #fee2e2;
+            transform: scale(1.05);
+        }
+
+        .btn-add {
+            background-color: transparent;
+            border: 1px dashed #3b82f6;
+            color: #3b82f6;
+            padding: 8px 16px;
+            font-size: 0.85em;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            align-self: flex-start;
+        }
+
+        .btn-add:hover {
+            background-color: rgba(59, 130, 246, 0.08);
+        }
+
+        .btn-submit {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 1em;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        .error-box {
+            background-color: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: #b91c1c;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            text-align: center;
+            display: none;
+        }
+
+        /* ============================================================
+           REPORT CARD
+           ============================================================ */
+
+        .report-card {
+            background-color: #fdfdfd;
+            border: 3px double #1e3a8a;
+            border-radius: 12px;
+            padding: 30px 25px;
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            flex: 1;
+            position: relative;
+            animation: fadeInRight 0.5s ease both;
+        }
+
+        .report-card h3 {
+            text-align: center;
+            color: #1e3a8a;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+        }
+
+        .transcript-subtitle {
+            text-align: center;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #6b7280;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #d1d5db;
+            padding-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .transcript-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            color: #4b5563;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .transcript-meta strong {
+            color: #111827;
+        }
+
+        .transcript-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .transcript-table th {
+            background-color: #f3f4f6;
+            color: #374151;
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            padding: 8px 10px;
+            border-bottom: 2px solid #d1d5db;
+            text-align: left;
+        }
+
+        .transcript-table td {
+            padding: 10px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 0.88em;
+            color: #374151;
+        }
+
+        .transcript-summary {
+            border-top: 2px solid #d1d5db;
+            padding-top: 15px;
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            color: #4b5563;
+        }
+
+        .summary-row strong {
+            color: #111827;
+        }
+
+        .transcript-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .signature-line {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .sig-space {
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            font-size: 1.1em;
+            color: #1e3a8a;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #9ca3af;
+            width: 120px;
+            padding-bottom: 4px;
+        }
+
+        .signature-line span {
+            font-size: 0.75em;
+            color: #6b7280;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+        }
+
+        .grade-badge {
+            padding: 3px 10px;
+            border-radius: 9999px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.8em;
+            display: inline-block;
+        }
+
+        .grade-aplus { background-color: #10b981; }
+        .grade-a { background-color: #14b8a6; }
+        .grade-b { background-color: #3b82f6; }
+        .grade-c { background-color: #f59e0b; }
+        .grade-d { background-color: #f97316; }
+        .grade-fail { background-color: #ef4444; }
+
+        .status-row.pass {
+            color: #16a34a;
+        }
+
+        .status-row.fail {
+            color: #dc2626;
+        }
+
+        footer {
+            margin-top: 30px;
+            font-size: 0.8em;
+            color: #9ca3af;
+            border-top: 1px solid #f3f4f6;
+            padding-top: 15px;
+            text-align: center;
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* ============================================================
+           THEME TOGGLE
+           ============================================================ */
+
+        .theme-toggle-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+        }
+
+        .theme-toggle {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            border: 1px solid #d1d5db;
+            padding: 8px 14px;
+            font-size: 0.85em;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: #e5e7eb;
+            transform: translateY(-1px);
+        }
+
+        /* ============================================================
+           DARK THEME
+           ============================================================ */
+
+        body.dark-theme {
+            background-color: #111827;
+            color: #e5e7eb;
+        }
+
+        body.dark-theme .container {
+            background-color: #1f2937;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+        }
+
+        body.dark-theme h2 {
+            color: #f9fafb;
+        }
+
+        body.dark-theme .info-text {
+            color: #9ca3af;
+        }
+
+        body.dark-theme .form-group label {
+            color: #d1d5db;
+        }
+
+        body.dark-theme .form-group input {
+            background-color: #374151;
+            color: #f9fafb;
+            border-color: #4b5563;
+        }
+
+        body.dark-theme .form-group input::placeholder {
+            color: #9ca3af;
+        }
+
+        body.dark-theme .form-group input:focus {
+            border-color: #60a5fa;
+            background-color: #4b5563;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+        }
+
+        body.dark-theme .btn-add {
+            color: #60a5fa;
+            border-color: #60a5fa;
+        }
+
+        body.dark-theme .btn-add:hover {
+            background-color: rgba(96, 165, 250, 0.1);
+        }
+
+        body.dark-theme .btn-delete-row:hover {
+            background-color: #7f1d1d;
+        }
+
+        body.dark-theme .btn-submit {
+            background-color: #3b82f6;
+        }
+
+        body.dark-theme .btn-submit:hover {
+            background-color: #2563eb;
+        }
+
+        body.dark-theme .error-box {
+            background-color: #450a0a;
+            border-color: #991b1b;
+            color: #fca5a5;
+        }
+
+        body.dark-theme .report-card {
+            background-color: #1f2937;
+            border-color: #60a5fa;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        body.dark-theme .report-card h3 {
+            color: #93c5fd;
+        }
+
+        body.dark-theme .transcript-subtitle {
+            color: #9ca3af;
+            border-bottom-color: #4b5563;
+        }
+
+        body.dark-theme .transcript-meta {
+            color: #d1d5db;
+        }
+
+        body.dark-theme .transcript-meta strong {
+            color: #f9fafb;
+        }
+
+        body.dark-theme .transcript-table th {
+            background-color: #374151;
+            color: #e5e7eb;
+            border-bottom-color: #6b7280;
+        }
+
+        body.dark-theme .transcript-table td {
+            color: #d1d5db;
+            border-bottom-color: #4b5563;
+        }
+
+        body.dark-theme .transcript-summary {
+            border-top-color: #6b7280;
+        }
+
+        body.dark-theme .summary-row {
+            color: #d1d5db;
+        }
+
+        body.dark-theme .summary-row strong {
+            color: #f9fafb;
+        }
+
+        body.dark-theme .sig-space {
+            color: #93c5fd;
+            border-bottom-color: #6b7280;
+        }
+
+        body.dark-theme .signature-line span {
+            color: #9ca3af;
+        }
+
+        body.dark-theme .status-row.pass {
+            color: #4ade80;
+        }
+
+        body.dark-theme .status-row.fail {
+            color: #f87171;
+        }
+
+        body.dark-theme footer {
+            color: #9ca3af;
+            border-top-color: #374151;
+        }
+
+        body.dark-theme .theme-toggle {
+            background-color: #374151;
+            color: #f9fafb;
+            border-color: #6b7280;
+        }
+
+        body.dark-theme .theme-toggle:hover {
+            background-color: #4b5563;
+        }
+
+        /* ============================================================
+           RESPONSIVE DESIGN
+           ============================================================ */
+
+        @media (max-width: 850px) {
+            .container.has-report {
+                max-width: 550px;
+            }
+
+            .container.has-report .app-layout {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .report-card {
+                margin-top: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container" id="mainContainer">
+
+        <!-- Theme Toggle -->
+        <div class="theme-toggle-wrapper">
+            <button type="button" id="themeToggle"
+                class="theme-toggle" onclick="toggleTheme()">
+                🌙 Dark Mode
+            </button>
+        </div>
+
+        <div class="app-layout">
+
+            <!-- Left Side: Form and Header -->
+            <div class="form-section">
+
+                <div class="logo">🏫</div>
+
+                <h2>International Institute of Technology</h2>
+
+                <p class="info-text">
+                    Student Grading Portal — Form Validation & Control Structures
+                </p>
+
+                <form id="gradingForm"
+                    onsubmit="event.preventDefault(); calculateGrade();">
+
+                    <!-- Student Name -->
+                    <div class="form-group">
+                        <label for="studentName">Student Name</label>
+
+                        <input type="text"
+                            id="studentName"
+                            placeholder="Enter student name (Letters only)">
+                    </div>
+
+                    <!-- Subject Inputs -->
+                    <div class="form-group">
+
+                        <label>Subject Marks (0-100)</label>
+
+                        <div id="subjectsContainer">
+                            <!-- Dynamic subject rows will load here -->
+                        </div>
+
+                        <button type="button"
+                            class="btn-add"
+                            onclick="addSubjectRow('', '')">
+                            + Add Subject
+                        </button>
+
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        Calculate & Generate Report
+                    </button>
+
+                </form>
+
+                <!-- Error Box -->
+                <div id="errorBox" class="error-box"></div>
+
+            </div>
+
+            <!-- Right Side: Report Card -->
+            <div id="reportCard" class="report-card">
+                <!-- Dynamic content will be injected here -->
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Developed by <strong>Anish Singh</strong></p>
+            <p>PRN: 24070521214</p>
+        </footer>
+
+    </div>
+
+    <script>
+
+        /* ============================================================
+           DEFAULT SUBJECTS
+           ============================================================ */
+
+        const defaultSubjects = [
+            "Mathematics",
+            "Physics",
+            "Chemistry"
+        ];
+
+        window.onload = function () {
+            defaultSubjects.forEach(sub => addSubjectRow(sub, ""));
+        };
+
+
+        /* ============================================================
+           THEME TOGGLE
+           ============================================================ */
+
+        function toggleTheme() {
+
+            const body = document.body;
+            const themeToggle = document.getElementById("themeToggle");
+
+            body.classList.toggle("dark-theme");
+
+            if (body.classList.contains("dark-theme")) {
+                themeToggle.innerHTML = "☀️ Light Mode";
+            } else {
+                themeToggle.innerHTML = "🌙 Dark Mode";
+            }
+
+        }
+
+
+        /* ============================================================
+           ADD SUBJECT ROW
+           ============================================================ */
+
+        function addSubjectRow(name = "", marks = "") {
+
+            const container = document.getElementById("subjectsContainer");
+
+            const row = document.createElement("div");
+
+            row.className = "subject-row";
+
+            row.innerHTML = `
+                <input type="text"
+                    class="subj-name"
+                    placeholder="Subject Name"
+                    value="${name}">
+
+                <input type="number"
+                    class="subj-marks"
+                    placeholder="Marks"
+                    min="0"
+                    max="100"
+                    value="${marks}">
+
+                <button type="button"
+                    class="btn-delete-row"
+                    onclick="removeSubjectRow(this)">
+                    🗑️
+                </button>
+            `;
+
+            container.appendChild(row);
+
+        }
+
+
+        /* ============================================================
+           REMOVE SUBJECT ROW
+           ============================================================ */
+
+        function removeSubjectRow(button) {
+
+            const row = button.parentElement;
+
+            const container = document.getElementById("subjectsContainer");
+
+            if (container.children.length > 1) {
+
+                row.remove();
+
+            } else {
+
+                showError("You must have at least one subject.");
+
+            }
+
+        }
+
+
+        /* ============================================================
+           SUBJECT GRADE
+           ============================================================ */
+
+        function getSubjectGrade(marks) {
+
+            if (marks >= 90) return "A+";
+            if (marks >= 80) return "A";
+            if (marks >= 70) return "B";
+            if (marks >= 60) return "C";
+            if (marks >= 50) return "D";
+
+            return "F";
+
+        }
+
+
+        /* ============================================================
+           GRADE BADGE CLASS
+           ============================================================ */
+
+        function getGradeBadgeClass(grade) {
+
+            if (grade === "A+") return "grade-aplus";
+            if (grade === "A") return "grade-a";
+            if (grade === "B") return "grade-b";
+            if (grade === "C") return "grade-c";
+            if (grade === "D") return "grade-d";
+
+            return "grade-fail";
+
+        }
+
+
+        /* ============================================================
+           CALCULATE GRADE
+           ============================================================ */
+
+        function calculateGrade() {
+
+            const name = document.getElementById("studentName")
+                .value.trim();
+
+            const errorBox = document.getElementById("errorBox");
+
+            const reportCard = document.getElementById("reportCard");
+
+            const mainContainer = document.getElementById("mainContainer");
+
+            // Reset elements and layout
+
+            errorBox.style.display = "none";
+
+            errorBox.innerHTML = "";
+
+            reportCard.style.display = "none";
+
+            mainContainer.classList.remove("has-report");
+
+
+            // Validate student name
+
+            if (!name) {
+
+                showError("Please enter the student's name.");
+
+                return;
+
+            }
+
+
+            // Validate name: Letters and spaces only
+
+            const nameRegex = /^[a-zA-Z\s]+$/;
+
+            if (!nameRegex.test(name)) {
+
+                showError(
+                    "Student name must only contain letters and spaces (no numbers or special characters)."
+                );
+
+                return;
+
+            }
+
+
+            // Gather subjects
+
+            const rows = document.querySelectorAll(".subject-row");
+
+            const subjectsList = [];
+
+            let totalMarks = 0;
+
+            let maxMarks = 0;
+
+
+            for (let i = 0; i < rows.length; i++) {
+
+                const nameInput = rows[i].querySelector(".subj-name");
+
+                const marksInput = rows[i].querySelector(".subj-marks");
+
+                const sName = nameInput.value.trim();
+
+                const sMarksStr = marksInput.value;
+
+
+                if (!sName) {
+
+                    showError(`Please enter a name for Subject ${i + 1}.`);
+
+                    nameInput.focus();
+
+                    return;
+
+                }
+
+
+                if (sMarksStr === "") {
+
+                    showError(`Please enter marks for "${sName}".`);
+
+                    marksInput.focus();
+
+                    return;
+
+                }
+
+
+                const sMarks = Number(sMarksStr);
+
+
+                if (isNaN(sMarks) || sMarks < 0 || sMarks > 100) {
+
+                    showError(
+                        `Marks for "${sName}" must be a number between 0 and 100.`
+                    );
+
+                    marksInput.focus();
+
+                    return;
+
+                }
+
+
+                subjectsList.push({
+                    name: sName,
+                    marks: sMarks
+                });
+
+                totalMarks += sMarks;
+
+                maxMarks += 100;
+
+            }
+
+
+            // Calculate percentage
+
+            const percentage = (totalMarks / maxMarks) * 100;
+
+
+            // Grading System
+
+            let grade = "";
+
+            let gradeClass = "";
+
+            let passStatus = "Passed";
+
+            let statusClass = "pass";
+
+
+            if (percentage >= 90) {
+
+                grade = "A+";
+
+                gradeClass = "grade-aplus";
+
+            } else if (percentage >= 80) {
+
+                grade = "A";
+
+                gradeClass = "grade-a";
+
+            } else if (percentage >= 70) {
+
+                grade = "B";
+
+                gradeClass = "grade-b";
+
+            } else if (percentage >= 60) {
+
+                grade = "C";
+
+                gradeClass = "grade-c";
+
+            } else if (percentage >= 50) {
+
+                grade = "D";
+
+                gradeClass = "grade-d";
+
+            } else {
+
+                grade = "Fail";
+
+                gradeClass = "grade-fail";
+
+                passStatus = "Failed";
+
+                statusClass = "fail";
+
+            }
+
+
+            // Expand container and show report
+
+            mainContainer.classList.add("has-report");
+
+            reportCard.style.display = "flex";
+
+
+            // Current date
+
+            const dateOptions = {
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            };
+
+            const issueDate = new Date().toLocaleDateString(
+                "en-US",
+                dateOptions
+            );
+
+
+            // Build transcript table
+
+            let tableRows = "";
+
+
+            subjectsList.forEach(sub => {
+
+                const subGrade = getSubjectGrade(sub.marks);
+
+                tableRows += `
+                    <tr>
+                        <td>${sub.name}</td>
+
+                        <td style="text-align: center;">
+                            <strong>${sub.marks}</strong> / 100
+                        </td>
+
+                        <td style="text-align: center;">
+                            <span class="grade-badge ${getGradeBadgeClass(subGrade)}">
+                                ${subGrade}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+
+            });
+
+
+            // Build report card
+
+            reportCard.innerHTML = `
+
+                <h3>International Institute of Technology</h3>
+
+                <div class="transcript-subtitle">
+                    Official Academic Transcript
+                </div>
+
+
+                <div class="transcript-meta">
+
+                    <div>
+                        <span>Student Name:</span>
+                        <strong>${name}</strong>
+                    </div>
+
+                    <div>
+                        <span>Date of Issue:</span>
+                        <strong>${issueDate}</strong>
+                    </div>
+
+                </div>
+
+
+                <table class="transcript-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Subject</th>
+
+                            <th style="text-align: center;">
+                                Marks
+                            </th>
+
+                            <th style="text-align: center;">
+                                Grade
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        ${tableRows}
+
+                    </tbody>
+
+                </table>
+
+
+                <div class="transcript-summary">
+
+                    <div class="summary-row">
+
+                        <span>Aggregate Total:</span>
+
+                        <strong>
+                            ${totalMarks} / ${maxMarks}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>Final Percentage:</span>
+
+                        <strong>
+                            ${percentage.toFixed(2)}%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>Academic Grade:</span>
+
+                        <span class="grade-badge ${gradeClass}">
+                            ${grade}
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-row status-row ${statusClass}">
+
+                        <span>Result Status:</span>
+
+                        <strong>${passStatus}</strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="transcript-footer">
+
+                    <div class="signature-line">
+
+                        <div class="sig-space">
+                            Approved
+                        </div>
+
+                        <span>
+                            Registrar (Evaluation)
+                        </span>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+
+
+        /* ============================================================
+           ERROR MESSAGE
+           ============================================================ */
+
+        function showError(message) {
+
+            const errorBox = document.getElementById("errorBox");
+
+            errorBox.style.display = "block";
+
+            errorBox.innerText = message;
+
+            document.getElementById("mainContainer")
+                .classList.remove("has-report");
+
+        }
+
+    </script>
+
+</body>
+</html>
