@@ -1,0 +1,1207 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>IntelliText Analyzer & Validator</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto+Mono:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* ================= RESET & THEME VARIABLES ================= */
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --body-bg: linear-gradient(135deg, #e0f7fa, #f1f8e9);
+      --container-bg: #ffffff;
+      --heading-color: #2c3e50;
+      --label-color: #34495e;
+      --text-color: #555555;
+      --section-bg: #f4f6f8;
+      --card-bg: #ffffff;
+      --input-bg: #ffffff;
+      --border-color: #bdc3c7;
+      --code-bg: #dfe6e9;
+      --code-text: #2c3e50;
+      --shadow-color: rgba(0, 0, 0, 0.1);
+      --placeholder-color: #7f8c8d;
+    }
+
+    /* ================= DARK MODE VARIABLES ================= */
+
+    body.dark-mode {
+      --body-bg: linear-gradient(135deg, #0f172a, #1e293b);
+      --container-bg: #1e293b;
+      --heading-color: #f8fafc;
+      --label-color: #e2e8f0;
+      --text-color: #cbd5e1;
+      --section-bg: #273449;
+      --card-bg: #334155;
+      --input-bg: #1e293b;
+      --border-color: #64748b;
+      --code-bg: #0f172a;
+      --code-text: #e2e8f0;
+      --shadow-color: rgba(0, 0, 0, 0.4);
+      --placeholder-color: #94a3b8;
+    }
+
+    /* ================= BODY ================= */
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: var(--body-bg);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 50px;
+      transition:
+        background 0.3s ease,
+        color 0.3s ease;
+    }
+
+    /* ================= MAIN CONTAINER ================= */
+
+    .container {
+      background: var(--container-bg);
+      max-width: 1200px;
+      width: 100%;
+      padding: 50px 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 50px var(--shadow-color);
+      overflow: hidden;
+      transition:
+        background 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+
+    /* ================= HEADER ================= */
+
+    h1 {
+      text-align: center;
+      font-size: 3em;
+      color: var(--heading-color);
+      margin-bottom: 30px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: color 0.3s ease;
+    }
+
+    /* ================= THEME TOGGLE ================= */
+
+    .theme-toggle {
+      display: block;
+      width: auto;
+      margin: 0 auto 40px auto;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: #ffffff;
+      font-size: 0.95em;
+      font-weight: 700;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(99, 102, 241, 0.3);
+      transition:
+        transform 0.3s ease,
+        background 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+      background: linear-gradient(135deg, #8b5cf6, #6366f1);
+      transform: translateY(-2px);
+    }
+
+    /* ================= INPUT SECTION ================= */
+
+    .input-section {
+      display: grid;
+      gap: 30px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+      color: var(--label-color);
+      transition: color 0.3s ease;
+    }
+
+    input[type="text"],
+    textarea {
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: var(--input-bg);
+      color: var(--text-color);
+      font-size: 1em;
+      font-family: "Inter", sans-serif;
+      transition:
+        background 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    input[type="text"]::placeholder,
+    textarea::placeholder {
+      color: var(--placeholder-color);
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #2980b9;
+      box-shadow: 0 0 12px rgba(41, 128, 185, 0.3);
+    }
+
+    textarea {
+      min-height: 180px;
+      resize: vertical;
+    }
+
+    /* ================= BUTTON ================= */
+
+    .analyze-button {
+      margin-top: 30px;
+      padding: 20px;
+      width: 100%;
+      background: linear-gradient(135deg, #2980b9, #3498db);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1.25em;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(41, 128, 185, 0.2);
+      transition:
+        background 0.3s ease,
+        transform 0.3s ease;
+    }
+
+    .analyze-button:hover {
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      transform: translateY(-2px);
+    }
+
+    /* ================= RESULTS CONTAINER ================= */
+
+    .results-container {
+      margin-top: 60px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* ================= RESULT CARDS ================= */
+
+    .result-card {
+      background: var(--card-bg);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px var(--shadow-color);
+      margin-bottom: 20px;
+      transition:
+        background 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+
+    .result-card h3 {
+      font-size: 1.5em;
+      margin-bottom: 15px;
+      color: #3498db;
+    }
+
+    p {
+      margin-bottom: 12px;
+      font-size: 1em;
+      line-height: 1.6;
+      color: var(--text-color);
+    }
+
+    strong {
+      color: var(--heading-color);
+    }
+
+    /* ================= CODE BLOCK ================= */
+
+    pre {
+      background-color: var(--code-bg);
+      color: var(--code-text);
+      padding: 15px;
+      border-radius: 10px;
+      overflow-x: auto;
+      font-family: "Roboto Mono", monospace;
+      font-size: 0.95em;
+      border: 1px solid var(--border-color);
+      margin-top: 10px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      transition:
+        background 0.3s ease,
+        color 0.3s ease;
+    }
+
+    /* ================= EMAIL TAGS ================= */
+
+    .email-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .email-tag {
+      background: linear-gradient(135deg, #2980b9, #3498db);
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 25px;
+      font-size: 0.95em;
+      font-weight: 500;
+      box-shadow: 0 4px 15px rgba(41, 128, 185, 0.2);
+      transition: background 0.2s ease;
+      word-break: break-word;
+    }
+
+    .email-tag:hover {
+      background: linear-gradient(135deg, #3498db, #2980b9);
+    }
+
+    /* ================= STATUS BADGES ================= */
+
+    .sentiment,
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1em;
+      margin-left: 10px;
+    }
+
+    .positive {
+      background-color: #d4edda;
+      color: #155724;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .negative {
+      background-color: #f8d7da;
+      color: #721c24;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .neutral {
+      background-color: #fff3cd;
+      color: #856404;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .label-info {
+      color: var(--text-color);
+      margin-top: 15px;
+    }
+
+    /* ================= RESPONSIVE DESIGN ================= */
+
+    @media (max-width: 768px) {
+      body {
+        padding: 20px;
+      }
+
+      .container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 2em;
+      }
+
+      .theme-toggle {
+        font-size: 0.85em;
+        padding: 10px 18px;
+      }
+
+      .result-card {
+        padding: 20px;
+      }
+
+      .result-card h3 {
+        font-size: 1.25em;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        padding: 25px 15px;
+      }
+
+      h1 {
+        font-size: 1.6em;
+      }
+
+      input[type="text"],
+      textarea {
+        padding: 15px;
+      }
+
+      .analyze-button {
+        font-size: 1em;
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <h1>IntelliText Analyzer &amp; Validator</h1>
+
+    <!-- Theme Toggle -->
+    <button
+      type="button"
+      class="theme-toggle"
+      id="themeToggle"
+      onclick="toggleTheme()"
+    >
+      🌙 Dark Mode
+    </button>
+
+    <!-- Input Section -->
+    <div class="input-section">
+
+      <div class="input-group">
+        <label for="textInput">Text for Analysis</label>
+
+        <textarea
+          id="textInput"
+          placeholder="Paste your text here for detailed analysis..."
+        ></textarea>
+      </div>
+
+      <div class="input-group">
+        <label for="emailInput">Email Address for Validation</label>
+
+        <input
+          type="text"
+          id="emailInput"
+          placeholder="e.g., user@example.com"
+        />
+      </div>
+
+      <button
+        type="button"
+        class="analyze-button"
+        id="analyzeBtn"
+      >
+        Analyze &amp; Validate
+      </button>
+
+    </div>
+
+    <!-- Results Container -->
+    <div
+      class="results-container"
+      id="resultsContainer"
+      style="display: none;"
+    >
+      <!-- Results will be dynamically injected here -->
+    </div>
+
+  </div>
+
+  <script>
+    /* ================= DOM ELEMENTS ================= */
+
+    const textInput = document.getElementById("textInput");
+    const emailInput = document.getElementById("emailInput");
+    const analyzeBtn = document.getElementById("analyzeBtn");
+    const resultsContainer = document.getElementById("resultsContainer");
+    const themeToggle = document.getElementById("themeToggle");
+
+    /* ================= EVENT LISTENERS ================= */
+
+    analyzeBtn.addEventListener("click", runAnalysis);
+
+    /* Allow Ctrl + Enter to analyze text */
+    textInput.addEventListener("keydown", function (event) {
+      if (event.ctrlKey && event.key === "Enter") {
+        runAnalysis();
+      }
+    });
+
+    /* ================= MAIN ANALYSIS FUNCTION ================= */
+
+    function runAnalysis() {
+      resultsContainer.innerHTML = "";
+      resultsContainer.style.display = "block";
+
+      const text = textInput.value.trim();
+      const email = emailInput.value.trim();
+
+      if (!text && !email) {
+        resultsContainer.innerHTML = `
+          <div class="result-card">
+            <h3>Input Required</h3>
+            <p>Please enter some text or an email address to analyze.</p>
+          </div>
+        `;
+
+        return;
+      }
+
+      if (text) {
+        const metrics = analyzeText(text);
+        const wordFreqs = getWordFrequencies(text);
+        const charDist = getCharDistribution(text);
+        const sentiment = getSentiment(text);
+
+        renderTextAnalysis(
+          metrics,
+          wordFreqs,
+          charDist,
+          sentiment
+        );
+      }
+
+      if (email) {
+        const validation = validateEmail(email);
+
+        renderEmailValidation(
+          validation,
+          email
+        );
+      }
+
+      if (text) {
+        const emails = extractEmails(text);
+
+        renderExtractedEmails(emails);
+      }
+    }
+
+    /* ================= TEXT ANALYSIS ================= */
+
+    function analyzeText(text) {
+      const charCount = text.length;
+
+      const words = text.match(/\b\w+\b/g) || [];
+      const wordCount = words.length;
+
+      const sentences = text
+        .split(/[.!?]+/)
+        .filter(sentence => sentence.trim().length > 0);
+
+      const sentenceCount = sentences.length;
+
+      const lowerText = text.toLowerCase();
+
+      const syllables = countSyllables(words);
+
+      const avgWordsPerSentence =
+        wordCount / (sentenceCount || 1);
+
+      const avgSyllablesPerWord =
+        syllables / (wordCount || 1);
+
+      const fleschEase = calculateFleschEase(
+        wordCount,
+        sentenceCount,
+        syllables
+      );
+
+      const fleschGrade = calculateFleschGrade(
+        wordCount,
+        sentenceCount,
+        syllables
+      );
+
+      return {
+        charCount,
+        wordCount,
+        sentenceCount,
+        avgWordsPerSentence,
+        avgSyllablesPerWord,
+        fleschEase,
+        fleschGrade,
+        lowerText
+      };
+    }
+
+    /* ================= SYLLABLE CALCULATION ================= */
+
+    function countSyllables(words) {
+      let total = 0;
+
+      for (const word of words) {
+        total += estimateSyllables(word);
+      }
+
+      return total;
+    }
+
+    function estimateSyllables(word) {
+      word = word.toLowerCase();
+
+      if (word.length <= 3) {
+        return 1;
+      }
+
+      let count = 0;
+      const vowels = "aeiouy";
+      let previousVowel = false;
+
+      for (const character of word) {
+        const isVowel = vowels.includes(character);
+
+        if (isVowel && !previousVowel) {
+          count++;
+        }
+
+        previousVowel = isVowel;
+      }
+
+      if (word.endsWith("e")) {
+        count--;
+      }
+
+      if (count === 0) {
+        count = 1;
+      }
+
+      return count;
+    }
+
+    /* ================= READABILITY CALCULATIONS ================= */
+
+    function calculateFleschEase(
+      words,
+      sentences,
+      syllables
+    ) {
+      return (
+        206.835 -
+        1.015 * (words / (sentences || 1)) -
+        84.6 * (syllables / (words || 1))
+      );
+    }
+
+    function calculateFleschGrade(
+      words,
+      sentences,
+      syllables
+    ) {
+      return (
+        0.39 * (words / (sentences || 1)) +
+        11.8 * (syllables / (words || 1)) -
+        15.59
+      );
+    }
+
+    /* ================= WORD FREQUENCY ================= */
+
+    function getWordFrequencies(text) {
+      const stopWords = new Set([
+        "a",
+        "an",
+        "the",
+        "is",
+        "are",
+        "was",
+        "were",
+        "be",
+        "been",
+        "being",
+        "of",
+        "to",
+        "in",
+        "on",
+        "at",
+        "for",
+        "with",
+        "by",
+        "about",
+        "as",
+        "and",
+        "or",
+        "but",
+        "if",
+        "then",
+        "so",
+        "it",
+        "its",
+        "that",
+        "this",
+        "i",
+        "me",
+        "my",
+        "you",
+        "your",
+        "he",
+        "him",
+        "his",
+        "she",
+        "her",
+        "hers",
+        "we",
+        "us",
+        "our",
+        "they",
+        "them",
+        "their",
+        "what",
+        "which",
+        "who",
+        "whom",
+        "when",
+        "where",
+        "why",
+        "how",
+        "all",
+        "any",
+        "both",
+        "each",
+        "few",
+        "more",
+        "most",
+        "other",
+        "some",
+        "such",
+        "no",
+        "nor",
+        "not",
+        "only",
+        "own",
+        "same",
+        "than",
+        "too",
+        "very",
+        "s",
+        "t",
+        "can",
+        "will",
+        "just",
+        "don",
+        "should",
+        "now"
+      ]);
+
+      const words =
+        text.toLowerCase().match(/\b\w+\b/g) || [];
+
+      const frequencyMap = {};
+
+      for (const word of words) {
+        if (!stopWords.has(word)) {
+          frequencyMap[word] =
+            (frequencyMap[word] || 0) + 1;
+        }
+      }
+
+      const sorted = Object.entries(frequencyMap)
+        .map(([word, frequency]) => ({
+          word,
+          frequency
+        }))
+        .sort((a, b) => b.frequency - a.frequency);
+
+      return sorted;
+    }
+
+    /* ================= CHARACTER DISTRIBUTION ================= */
+
+    function getCharDistribution(text) {
+      const distribution = {};
+
+      for (const character of text) {
+        distribution[character] =
+          (distribution[character] || 0) + 1;
+      }
+
+      const mostFrequentCharacter =
+        Object.entries(distribution).reduce(
+          (a, b) => {
+            return b[1] > a[1]
+              ? {
+                  char: b[0],
+                  count: b[1]
+                }
+              : a;
+          },
+          {
+            char: "",
+            count: 0
+          }
+        );
+
+      const uniqueCount =
+        Object.keys(distribution).length;
+
+      return {
+        distribution,
+        mostFrequentCharacter,
+        uniqueCount
+      };
+    }
+
+    /* ================= SENTIMENT ANALYSIS ================= */
+
+    function getSentiment(text) {
+      const positiveWords = [
+        "great",
+        "good",
+        "excellent",
+        "amazing",
+        "love",
+        "happy",
+        "wonderful",
+        "fantastic",
+        "awesome",
+        "success",
+        "best",
+        "beautiful",
+        "helpful",
+        "nice"
+      ];
+
+      const negativeWords = [
+        "bad",
+        "terrible",
+        "poor",
+        "awful",
+        "hate",
+        "sad",
+        "horrible",
+        "disappointing",
+        "negative",
+        "worst",
+        "failure",
+        "problem",
+        "angry",
+        "difficult"
+      ];
+
+      const words =
+        text.toLowerCase().match(/\b\w+\b/g) || [];
+
+      let positiveCount = 0;
+      let negativeCount = 0;
+
+      for (const word of words) {
+        if (positiveWords.includes(word)) {
+          positiveCount++;
+        }
+
+        if (negativeWords.includes(word)) {
+          negativeCount++;
+        }
+      }
+
+      if (positiveCount > negativeCount) {
+        return "Positive";
+      }
+
+      if (negativeCount > positiveCount) {
+        return "Negative";
+      }
+
+      return "Neutral";
+    }
+
+    /* ================= EMAIL VALIDATION ================= */
+
+    function validateEmail(email) {
+      const regex =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+      const isValid = regex.test(email);
+
+      let username = "";
+      let domain = "";
+
+      if (isValid) {
+        const atIndex = email.indexOf("@");
+
+        username = email.substring(0, atIndex);
+        domain = email.substring(atIndex + 1);
+      }
+
+      return {
+        isValid,
+        username,
+        domain
+      };
+    }
+
+    /* ================= EXTRACT EMAILS ================= */
+
+    function extractEmails(text) {
+      const pattern =
+        /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}/g;
+
+      const matches = text.match(pattern) || [];
+
+      return [...new Set(matches)];
+    }
+
+    /* ================= SCORE COLOR CLASS ================= */
+
+    function getScoreClass(value, type = "ease") {
+      if (type === "grade") {
+        if (value < 8) {
+          return "positive";
+        }
+
+        if (value > 12) {
+          return "negative";
+        }
+
+        return "neutral";
+      }
+
+      if (value > 70) {
+        return "positive";
+      }
+
+      if (value < 30) {
+        return "negative";
+      }
+
+      return "neutral";
+    }
+
+    /* ================= SAFE HTML ESCAPING ================= */
+
+    function escapeHTML(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    /* ================= RENDER TEXT ANALYSIS ================= */
+
+    function renderTextAnalysis(
+      metrics,
+      wordFreqs,
+      charDist,
+      sentiment
+    ) {
+      const container = document.createElement("div");
+
+      const safeLowerText =
+        escapeHTML(metrics.lowerText);
+
+      const mostFrequentChar =
+        charDist.mostFrequentCharacter.char === " "
+          ? "[space]"
+          : charDist.mostFrequentCharacter.char;
+
+      const safeMostFrequentChar =
+        escapeHTML(mostFrequentChar);
+
+      const safeSentiment =
+        escapeHTML(sentiment);
+
+      const topWords =
+        wordFreqs
+          .slice(0, 5)
+          .map(word =>
+            `${escapeHTML(word.word)} (${word.frequency})`
+          )
+          .join(", ") || "N/A";
+
+      /* Summary and Readability */
+
+      container.innerHTML += `
+        <div class="result-card">
+          <h3>📊 Summary &amp; Readability</h3>
+
+          <p>
+            <strong>Character Count:</strong>
+            ${metrics.charCount}
+          </p>
+
+          <p>
+            <strong>Word Count:</strong>
+            ${metrics.wordCount}
+          </p>
+
+          <p>
+            <strong>Sentence Count:</strong>
+            ${metrics.sentenceCount}
+          </p>
+
+          <p>
+            <strong>Average Words per Sentence:</strong>
+            ${metrics.avgWordsPerSentence.toFixed(2)}
+          </p>
+
+          <p>
+            <strong>Average Syllables per Word:</strong>
+            ${metrics.avgSyllablesPerWord.toFixed(2)}
+          </p>
+        </div>
+      `;
+
+      /* Readability Scores */
+
+      const easeClass =
+        getScoreClass(metrics.fleschEase);
+
+      const gradeClass =
+        getScoreClass(metrics.fleschGrade, "grade");
+
+      container.innerHTML += `
+        <div class="result-card">
+          <h3>📖 Readability Scores</h3>
+
+          <p>
+            <strong>Flesch Reading Ease:</strong>
+            <span class="${easeClass}">
+              ${metrics.fleschEase.toFixed(2)}
+            </span>
+          </p>
+
+          <p>
+            <strong>Flesch-Kincaid Grade:</strong>
+            <span class="${gradeClass}">
+              ${metrics.fleschGrade.toFixed(2)}
+            </span>
+          </p>
+        </div>
+      `;
+
+      /* Content Insights */
+
+      container.innerHTML += `
+        <div class="result-card">
+          <h3>💡 Content Insights</h3>
+
+          <p>
+            <strong>Sentiment:</strong>
+            <span class="status-badge ${
+              sentiment === "Positive"
+                ? "positive"
+                : sentiment === "Negative"
+                ? "negative"
+                : "neutral"
+            }">
+              ${safeSentiment}
+            </span>
+          </p>
+
+          <p>
+            <strong>Top Words:</strong>
+          </p>
+
+          <pre>${topWords}</pre>
+        </div>
+      `;
+
+      /* Character Distribution */
+
+      container.innerHTML += `
+        <div class="result-card">
+          <h3>🔤 Character Distribution</h3>
+
+          <p>
+            <strong>Most Frequent Character:</strong>
+            ${safeMostFrequentChar}
+            (${charDist.mostFrequentCharacter.count})
+          </p>
+
+          <p>
+            <strong>Unique Characters:</strong>
+            ${charDist.uniqueCount}
+          </p>
+
+          <p>
+            <strong>Sample in Lowercase:</strong>
+          </p>
+
+          <pre>${safeLowerText}</pre>
+        </div>
+      `;
+
+      resultsContainer.appendChild(container);
+    }
+
+    /* ================= RENDER EMAIL VALIDATION ================= */
+
+    function renderEmailValidation(
+      validation,
+      email
+    ) {
+      const container = document.createElement("div");
+
+      const safeEmail = escapeHTML(email);
+
+      const statusClass =
+        validation.isValid
+          ? "positive"
+          : "negative";
+
+      const statusText =
+        validation.isValid
+          ? "✔️ Valid"
+          : "❌ Invalid";
+
+      let extraInformation = "";
+
+      if (validation.isValid) {
+        extraInformation = `
+          <p>
+            <strong>Username:</strong>
+            ${escapeHTML(validation.username)}
+          </p>
+
+          <p>
+            <strong>Domain:</strong>
+            ${escapeHTML(validation.domain)}
+          </p>
+        `;
+      } else {
+        extraInformation = `
+          <p class="label-info">
+            Please enter a valid email address in the
+            correct format.
+          </p>
+        `;
+      }
+
+      container.innerHTML = `
+        <div class="result-card">
+          <h3>📧 Email Validation</h3>
+
+          <p>
+            <strong>Entered Email:</strong>
+            ${safeEmail || "N/A"}
+          </p>
+
+          <p>
+            <strong>Status:</strong>
+            <span class="${statusClass}">
+              ${statusText}
+            </span>
+          </p>
+
+          ${extraInformation}
+        </div>
+      `;
+
+      resultsContainer.appendChild(container);
+    }
+
+    /* ================= RENDER EXTRACTED EMAILS ================= */
+
+    function renderExtractedEmails(emails) {
+      const container = document.createElement("div");
+
+      if (emails.length > 0) {
+        const emailTags = emails
+          .map(email => {
+            return `
+              <div class="email-tag">
+                ${escapeHTML(email)}
+              </div>
+            `;
+          })
+          .join("");
+
+        container.innerHTML = `
+          <div class="result-card">
+            <h3>📨 Extracted Emails</h3>
+
+            <div class="email-tags">
+              ${emailTags}
+            </div>
+
+            <p class="label-info">
+              ${emails.length}
+              unique email address(es) found.
+            </p>
+          </div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="result-card">
+            <h3>📨 Extracted Emails</h3>
+
+            <p>
+              No email addresses detected.
+            </p>
+          </div>
+        `;
+      }
+
+      resultsContainer.appendChild(container);
+    }
+
+    /* ================= THEME TOGGLE ================= */
+
+    function toggleTheme() {
+      document.body.classList.toggle("dark-mode");
+
+      const isDarkMode =
+        document.body.classList.contains("dark-mode");
+
+      if (isDarkMode) {
+        themeToggle.textContent = "☀️ Light Mode";
+
+        localStorage.setItem("theme", "dark");
+      } else {
+        themeToggle.textContent = "🌙 Dark Mode";
+
+        localStorage.setItem("theme", "light");
+      }
+    }
+
+    /* ================= RESTORE SAVED THEME ================= */
+
+    const savedTheme =
+      localStorage.getItem("theme");
+
+    if (savedTheme === "dark") {
+      document.body.classList.add("dark-mode");
+
+      themeToggle.textContent = "☀️ Light Mode";
+    } else {
+      document.body.classList.remove("dark-mode");
+
+      themeToggle.textContent = "🌙 Dark Mode";
+    }
+  </script>
+</body>
+</html>
