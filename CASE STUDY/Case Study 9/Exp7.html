@@ -1,0 +1,498 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>To-Do List</title>
+
+  <style>
+    /* ================= THEME VARIABLES ================= */
+
+    :root {
+      --body-bg: #e0f7fa;
+      --container-bg: #ffffff;
+      --heading-color: #006064;
+      --input-bg: #ffffff;
+      --input-text: #263238;
+      --border-color: #0097a7;
+      --task-bg: #f1f8e9;
+      --task-text: #263238;
+      --shadow-color: rgba(0, 0, 0, 0.2);
+      --button-bg: #00bcd4;
+      --button-hover: #0097a7;
+    }
+
+    /* ================= DARK MODE ================= */
+
+    body.dark-mode {
+      --body-bg: #0f172a;
+      --container-bg: #1e293b;
+      --heading-color: #67e8f9;
+      --input-bg: #334155;
+      --input-text: #f8fafc;
+      --border-color: #22d3ee;
+      --task-bg: #334155;
+      --task-text: #f8fafc;
+      --shadow-color: rgba(0, 0, 0, 0.5);
+      --button-bg: #0891b2;
+      --button-hover: #0e7490;
+    }
+
+    /* ================= GENERAL STYLING ================= */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      background-color: var(--body-bg);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      transition:
+        background-color 0.3s ease,
+        color 0.3s ease;
+    }
+
+    .container {
+      background-color: var(--container-bg);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px var(--shadow-color);
+      width: 420px;
+      max-width: 100%;
+      transition:
+        background-color 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+
+    /* ================= HEADER ================= */
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 26px;
+      color: var(--heading-color);
+      transition: color 0.3s ease;
+    }
+
+    /* ================= THEME TOGGLE ================= */
+
+    #theme-toggle {
+      display: block;
+      margin: 0 auto 25px auto;
+      padding: 10px 18px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition:
+        transform 0.3s ease,
+        background 0.3s ease;
+    }
+
+    #theme-toggle:hover {
+      background: linear-gradient(135deg, #8b5cf6, #6366f1);
+      transform: translateY(-2px);
+    }
+
+    /* ================= INPUT SECTION ================= */
+
+    .input-area {
+      display: flex;
+      margin-bottom: 20px;
+      gap: 10px;
+    }
+
+    #task-input {
+      width: 100%;
+      min-width: 0;
+      padding: 10px;
+      font-size: 16px;
+      color: var(--input-text);
+      background-color: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      outline: none;
+      transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        border-color 0.3s ease;
+    }
+
+    #task-input::placeholder {
+      color: #94a3b8;
+    }
+
+    #task-input:focus {
+      box-shadow: 0 0 8px rgba(0, 188, 212, 0.3);
+    }
+
+    #add-btn {
+      padding: 10px 20px;
+      background-color: var(--button-bg);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    #add-btn:hover {
+      background-color: var(--button-hover);
+    }
+
+    /* ================= TASK LIST ================= */
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+      margin-bottom: 0;
+    }
+
+    li {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background-color: var(--task-bg);
+      padding: 10px 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.1);
+      transition:
+        background-color 0.3s ease,
+        transform 0.2s ease;
+    }
+
+    li:hover {
+      transform: translateY(-1px);
+    }
+
+    .task-text {
+      flex: 1;
+      min-width: 0;
+      font-size: 16px;
+      color: var(--task-text);
+      overflow-wrap: anywhere;
+      transition: color 0.3s ease;
+    }
+
+    /* ================= COMPLETED TASK ================= */
+
+    .done {
+      text-decoration: line-through;
+      color: #757575 !important;
+    }
+
+    /* ================= CHECKBOX ================= */
+
+    input[type="checkbox"] {
+      flex-shrink: 0;
+      margin-right: 2px;
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: #00acc1;
+    }
+
+    /* ================= ACTION BUTTONS ================= */
+
+    .buttons {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .btn {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      color: white;
+      transition: background-color 0.3s;
+    }
+
+    .edit-btn {
+      background-color: #ffb74d;
+    }
+
+    .edit-btn:hover {
+      background-color: #ffa000;
+    }
+
+    .delete-btn {
+      background-color: #e57373;
+    }
+
+    .delete-btn:hover {
+      background-color: #c62828;
+    }
+
+    /* ================= EMPTY MESSAGE ================= */
+
+    .empty-message {
+      text-align: center;
+      margin-top: 20px;
+      color: #94a3b8;
+      font-size: 14px;
+    }
+
+    /* ================= RESPONSIVE DESIGN ================= */
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        padding: 25px 18px;
+      }
+
+      .input-area {
+        gap: 6px;
+      }
+
+      #add-btn {
+        padding: 10px 14px;
+      }
+
+      li {
+        padding: 10px;
+        gap: 6px;
+      }
+
+      .buttons {
+        gap: 4px;
+      }
+
+      .btn {
+        padding: 5px 7px;
+        font-size: 12px;
+      }
+
+      .task-text {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <h1>To-Do List</h1>
+
+    <!-- Theme Toggle -->
+    <button
+      type="button"
+      id="theme-toggle"
+    >
+      🌙 Dark Mode
+    </button>
+
+    <!-- Task Input -->
+    <div class="input-area">
+      <input
+        type="text"
+        id="task-input"
+        placeholder="Enter a task"
+        maxlength="200"
+      />
+
+      <button
+        type="button"
+        id="add-btn"
+      >
+        Add
+      </button>
+    </div>
+
+    <!-- Task List -->
+    <ul id="task-list"></ul>
+
+    <p
+      id="empty-message"
+      class="empty-message"
+    >
+      No tasks added yet.
+    </p>
+
+  </div>
+
+  <script>
+    /* ================= DOM ELEMENTS ================= */
+
+    const taskInput = document.getElementById("task-input");
+    const addBtn = document.getElementById("add-btn");
+    const taskList = document.getElementById("task-list");
+    const emptyMessage = document.getElementById("empty-message");
+    const themeToggle = document.getElementById("theme-toggle");
+
+    /* ================= UPDATE EMPTY MESSAGE ================= */
+
+    function updateEmptyMessage() {
+      if (taskList.children.length === 0) {
+        emptyMessage.style.display = "block";
+      } else {
+        emptyMessage.style.display = "none";
+      }
+    }
+
+    /* ================= ADD TASK ================= */
+
+    function addTask() {
+      const taskText = taskInput.value.trim();
+
+      if (taskText === "") {
+        alert("Please enter a task.");
+        taskInput.focus();
+        return;
+      }
+
+      const li = document.createElement("li");
+
+      /* Checkbox */
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.setAttribute("aria-label", "Mark task as complete");
+
+      /* Task Text */
+      const span = document.createElement("span");
+      span.className = "task-text";
+      span.textContent = taskText;
+
+      /* Toggle Completed Status */
+      checkbox.addEventListener("change", function () {
+        if (checkbox.checked) {
+          span.classList.add("done");
+        } else {
+          span.classList.remove("done");
+        }
+      });
+
+      /* Buttons Container */
+      const buttonsDiv = document.createElement("div");
+      buttonsDiv.className = "buttons";
+
+      /* Edit Button */
+      const editBtn = document.createElement("button");
+      editBtn.className = "btn edit-btn";
+      editBtn.type = "button";
+      editBtn.textContent = "Edit";
+
+      /* Edit Task */
+      editBtn.addEventListener("click", function () {
+        const newTask = prompt(
+          "Edit task:",
+          span.textContent
+        );
+
+        if (
+          newTask !== null &&
+          newTask.trim() !== ""
+        ) {
+          span.textContent = newTask.trim();
+        }
+      });
+
+      /* Delete Button */
+      const deleteBtn = document.createElement("button");
+      deleteBtn.className = "btn delete-btn";
+      deleteBtn.type = "button";
+      deleteBtn.textContent = "Delete";
+
+      /* Delete Task */
+      deleteBtn.addEventListener("click", function () {
+        li.remove();
+        updateEmptyMessage();
+      });
+
+      /* Assemble Buttons */
+      buttonsDiv.appendChild(editBtn);
+      buttonsDiv.appendChild(deleteBtn);
+
+      /* Assemble List Item */
+      li.appendChild(checkbox);
+      li.appendChild(span);
+      li.appendChild(buttonsDiv);
+
+      /* Add Item to List */
+      taskList.appendChild(li);
+
+      /* Clear Input */
+      taskInput.value = "";
+      taskInput.focus();
+
+      updateEmptyMessage();
+    }
+
+    /* ================= EVENT LISTENERS ================= */
+
+    addBtn.addEventListener("click", addTask);
+
+    /* Add task using Enter key */
+    taskInput.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        addTask();
+      }
+    });
+
+    /* ================= THEME TOGGLE ================= */
+
+    function updateThemeButton() {
+      const isDarkMode =
+        document.body.classList.contains("dark-mode");
+
+      if (isDarkMode) {
+        themeToggle.textContent = "☀️ Light Mode";
+      } else {
+        themeToggle.textContent = "🌙 Dark Mode";
+      }
+    }
+
+    themeToggle.addEventListener("click", function () {
+      document.body.classList.toggle("dark-mode");
+
+      const isDarkMode =
+        document.body.classList.contains("dark-mode");
+
+      if (isDarkMode) {
+        localStorage.setItem("theme", "dark");
+      } else {
+        localStorage.setItem("theme", "light");
+      }
+
+      updateThemeButton();
+    });
+
+    /* ================= RESTORE SAVED THEME ================= */
+
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme === "dark") {
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+    }
+
+    updateThemeButton();
+
+    /* ================= INITIAL STATE ================= */
+
+    updateEmptyMessage();
+  </script>
+</body>
+</html>
