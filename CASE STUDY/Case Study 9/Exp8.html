@@ -1,0 +1,606 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Gym Admission Form & Receipt</title>
+
+    <style>
+        /* ================= THEME VARIABLES ================= */
+
+        :root {
+            --body-bg: #f4f4f4;
+            --container-bg: #ffffff;
+            --text-color: #333333;
+            --label-color: #333333;
+            --input-bg: #ffffff;
+            --input-text: #222222;
+            --border-color: #cccccc;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --receipt-border: #333333;
+            --receipt-line: #cccccc;
+            --secondary-text: #666666;
+            --footer-text: #777777;
+            --button-bg: #4caf50;
+            --button-hover: #45a049;
+            --heading-color: #333333;
+        }
+
+        /* ================= DARK MODE ================= */
+
+        body.dark-mode {
+            --body-bg: #0f172a;
+            --container-bg: #1e293b;
+            --text-color: #f8fafc;
+            --label-color: #e2e8f0;
+            --input-bg: #334155;
+            --input-text: #f8fafc;
+            --border-color: #64748b;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+            --receipt-border: #cbd5e1;
+            --receipt-line: #64748b;
+            --secondary-text: #cbd5e1;
+            --footer-text: #cbd5e1;
+            --button-bg: #16a34a;
+            --button-hover: #15803d;
+            --heading-color: #67e8f9;
+        }
+
+        /* ================= GENERAL STYLING ================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--body-bg);
+            color: var(--text-color);
+            margin: 20px;
+            transition:
+                background-color 0.3s ease,
+                color 0.3s ease;
+        }
+
+        /* ================= THEME TOGGLE ================= */
+
+        .theme-toggle {
+            display: block;
+            margin: 0 auto 25px auto;
+            padding: 10px 20px;
+            width: auto;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition:
+                transform 0.3s ease,
+                background 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            transform: translateY(-2px);
+        }
+
+        /* ================= FORM CONTAINER ================= */
+
+        .form-container {
+            background-color: var(--container-bg);
+            color: var(--text-color);
+            padding: 20px;
+            max-width: 500px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0 0 10px var(--shadow-color);
+            transition:
+                background-color 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--heading-color);
+            transition: color 0.3s ease;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            color: var(--label-color);
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background-color: var(--input-bg);
+            color: var(--input-text);
+            transition:
+                background-color 0.3s ease,
+                color 0.3s ease,
+                border-color 0.3s ease;
+        }
+
+        input::placeholder {
+            color: #94a3b8;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #22d3ee;
+            box-shadow: 0 0 5px rgba(34, 211, 238, 0.3);
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px;
+            width: 100%;
+            background-color: var(--button-bg);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--button-hover);
+        }
+
+        .error {
+            color: #ef4444;
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* ================= RECEIPT STYLING ================= */
+
+        .receipt-container {
+            background-color: var(--container-bg);
+            color: var(--text-color);
+            padding: 30px;
+            max-width: 450px;
+            margin: 30px auto;
+            border-radius: 8px;
+            border: 2px dashed var(--receipt-border);
+            box-shadow: 0 0 10px var(--shadow-color);
+            transition:
+                background-color 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        .receipt-header {
+            text-align: center;
+            border-bottom: 2px solid var(--receipt-border);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .receipt-header h3 {
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--heading-color);
+        }
+
+        .receipt-header p {
+            margin: 5px 0 0 0;
+            font-size: 13px;
+            color: var(--secondary-text);
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-bottom: 12px;
+            font-size: 15px;
+            border-bottom: 1px dotted var(--receipt-line);
+            padding-bottom: 5px;
+            overflow-wrap: anywhere;
+        }
+
+        .receipt-row strong {
+            color: var(--secondary-text);
+        }
+
+        .receipt-row span {
+            text-align: right;
+            overflow-wrap: anywhere;
+        }
+
+        .receipt-footer {
+            text-align: center;
+            margin-top: 25px;
+            font-style: italic;
+            color: var(--footer-text);
+            font-size: 14px;
+        }
+
+        .print-btn {
+            background-color: #008cba;
+            margin-top: 15px;
+        }
+
+        .print-btn:hover {
+            background-color: #007bb5;
+        }
+
+        /* ================= RESPONSIVE DESIGN ================= */
+
+        @media (max-width: 480px) {
+            body {
+                margin: 10px;
+            }
+
+            .form-container,
+            .receipt-container {
+                padding: 20px;
+            }
+
+            .receipt-row {
+                font-size: 13px;
+                gap: 10px;
+            }
+        }
+
+        /* ================= PRINT SETTINGS ================= */
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            .receipt-container,
+            .receipt-container * {
+                visibility: visible;
+            }
+
+            .receipt-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                max-width: 100%;
+                border: none;
+                box-shadow: none;
+                background-color: white;
+                color: black;
+            }
+
+            .print-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Theme Toggle -->
+    <button
+        type="button"
+        class="theme-toggle"
+        id="themeToggle"
+    >
+        🌙 Dark Mode
+    </button>
+
+    <!-- Admission Form -->
+    <div class="form-container" id="formBox">
+
+        <h2>Gym Admission Form</h2>
+
+        <form id="gymForm">
+
+            <label for="fullName">Full Name:</label>
+            <input
+                type="text"
+                id="fullName"
+                name="fullName"
+                placeholder="Enter full name"
+                maxlength="50"
+            />
+
+            <label for="email">Email:</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter email address"
+            />
+
+            <label for="mobile">Mobile Number:</label>
+            <input
+                type="text"
+                id="mobile"
+                name="mobile"
+                placeholder="10-digit mobile number"
+                maxlength="10"
+            />
+
+            <label for="age">Age:</label>
+            <input
+                type="number"
+                id="age"
+                name="age"
+                placeholder="Enter age"
+                min="1"
+                max="120"
+            />
+
+            <label for="plan">Membership Plan:</label>
+
+            <select id="plan" name="plan">
+                <option value="">Select Plan</option>
+                <option value="Monthly">Monthly Pack</option>
+                <option value="Quarterly">Quarterly Pack</option>
+                <option value="Yearly">Yearly Pack</option>
+            </select>
+
+            <button type="submit">
+                Submit & Generate Receipt
+            </button>
+
+            <div class="error" id="errorMsg"></div>
+
+        </form>
+    </div>
+
+    <!-- Receipt Display -->
+    <div
+        class="receipt-container"
+        id="receiptContainer"
+        style="display: none;"
+    >
+
+        <div class="receipt-header">
+
+            <h3>FITNESS CLUB RECEIPT</h3>
+
+            <p>
+                Health & Strength Center
+            </p>
+
+        </div>
+
+        <div id="receiptDetails"></div>
+
+        <div class="receipt-footer">
+
+            <p>
+                Thank you for joining our Gym!
+                <br />
+                No Pain, No Gain.
+            </p>
+
+            <button
+                type="button"
+                class="print-btn"
+                onclick="window.print()"
+            >
+                Print Receipt
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+        /* ================= DOM ELEMENTS ================= */
+
+        const gymForm = document.getElementById("gymForm");
+        const errorMsg = document.getElementById("errorMsg");
+        const receiptContainer = document.getElementById("receiptContainer");
+        const receiptDetails = document.getElementById("receiptDetails");
+        const themeToggle = document.getElementById("themeToggle");
+
+        /* ================= THEME TOGGLE ================= */
+
+        function updateThemeButton() {
+            const isDarkMode =
+                document.body.classList.contains("dark-mode");
+
+            if (isDarkMode) {
+                themeToggle.textContent = "☀️ Light Mode";
+            } else {
+                themeToggle.textContent = "🌙 Dark Mode";
+            }
+        }
+
+        themeToggle.addEventListener("click", function () {
+
+            document.body.classList.toggle("dark-mode");
+
+            const isDarkMode =
+                document.body.classList.contains("dark-mode");
+
+            if (isDarkMode) {
+                localStorage.setItem("theme", "dark");
+            } else {
+                localStorage.setItem("theme", "light");
+            }
+
+            updateThemeButton();
+
+        });
+
+        /* ================= RESTORE SAVED THEME ================= */
+
+        const savedTheme = localStorage.getItem("theme");
+
+        if (savedTheme === "dark") {
+            document.body.classList.add("dark-mode");
+        } else {
+            document.body.classList.remove("dark-mode");
+        }
+
+        updateThemeButton();
+
+        /* ================= FORM SUBMISSION ================= */
+
+        gymForm.addEventListener("submit", function (event) {
+
+            event.preventDefault();
+
+            // Clear previous error message
+            errorMsg.textContent = "";
+
+            // Get form values
+            const fullName =
+                document.getElementById("fullName").value.trim();
+
+            const email =
+                document.getElementById("email").value.trim();
+
+            const mobile =
+                document.getElementById("mobile").value.trim();
+
+            const age =
+                document.getElementById("age").value.trim();
+
+            const plan =
+                document.getElementById("plan").value;
+
+            /* ================= VALIDATION ================= */
+
+            if (fullName.length < 1 || fullName.length > 50) {
+                errorMsg.textContent =
+                    "Please enter a valid full name.";
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                errorMsg.textContent =
+                    "Please enter a valid email.";
+                return;
+            }
+
+            if (!validateMobile(mobile)) {
+                errorMsg.textContent =
+                    "Please enter a valid 10-digit mobile number.";
+                return;
+            }
+
+            if (age === "" || Number(age) < 1 || Number(age) > 120) {
+                errorMsg.textContent =
+                    "Please enter a valid age.";
+                return;
+            }
+
+            if (plan === "") {
+                errorMsg.textContent =
+                    "Please select a membership plan.";
+                return;
+            }
+
+            /* ================= RECEIPT GENERATION ================= */
+
+            const receiptNo =
+                "GYM" + Math.floor(100000 + Math.random() * 900000);
+
+            const currentDate =
+                new Date().toLocaleString();
+
+            /*
+             * Creating receipt rows safely using textContent
+             * to avoid inserting raw user input as HTML.
+             */
+
+            receiptDetails.innerHTML = "";
+
+            addReceiptRow("Receipt No:", receiptNo);
+            addReceiptRow("Date & Time:", currentDate);
+            addReceiptRow("Member Name:", fullName);
+            addReceiptRow("Email:", email);
+            addReceiptRow("Mobile:", mobile);
+            addReceiptRow("Age:", age + " Years");
+            addReceiptRow("Selected Plan:", plan, "plan-value");
+            addReceiptRow("Status:", "PAID", "paid-value");
+
+            /* ================= DISPLAY RECEIPT ================= */
+
+            receiptContainer.style.display = "block";
+
+            receiptContainer.scrollIntoView({
+                behavior: "smooth"
+            });
+
+            alert(
+                "Form submitted and receipt generated successfully!"
+            );
+
+            // Reset form fields
+            gymForm.reset();
+
+        });
+
+        /* ================= ADD RECEIPT ROW ================= */
+
+        function addReceiptRow(label, value, extraClass = "") {
+
+            const row = document.createElement("div");
+            row.className = "receipt-row";
+
+            const strong = document.createElement("strong");
+            strong.textContent = label;
+
+            const span = document.createElement("span");
+            span.textContent = value;
+
+            if (extraClass === "plan-value") {
+                span.style.fontWeight = "bold";
+                span.style.color = "#4caf50";
+            }
+
+            if (extraClass === "paid-value") {
+                span.style.color = "#22c55e";
+                span.style.fontWeight = "bold";
+            }
+
+            row.appendChild(strong);
+            row.appendChild(span);
+
+            receiptDetails.appendChild(row);
+
+        }
+
+        /* ================= EMAIL VALIDATION ================= */
+
+        function validateEmail(email) {
+
+            const re =
+                /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
+
+            return re.test(email);
+
+        }
+
+        /* ================= MOBILE VALIDATION ================= */
+
+        function validateMobile(mobile) {
+
+            const re = /^[0-9]{10}$/;
+
+            return re.test(mobile);
+
+        }
+    </script>
+
+</body>
+</html>
