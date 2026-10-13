@@ -1,0 +1,1199 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Portfolio | Anushka</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg: #090b14;
+    --card: #111522;
+    --text: #f5f5ff;
+    --muted: #a4a8bd;
+    --accent: #a78bfa;
+    --blue: #60a5fa;
+    --border: #252a3b;
+}
+
+body.light {
+    --bg: #f5f5ff;
+    --card: #ffffff;
+    --text: #17152a;
+    --muted: #62657a;
+    --border: #dedff0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.7;
+    transition: .3s;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    font: inherit;
+    cursor: pointer;
+}
+
+.container {
+    width: min(1100px, 90%);
+    margin: auto;
+}
+
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+}
+
+.navbar {
+    min-height: 72px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo {
+    font: 700 23px 'Space Grotesk', sans-serif;
+}
+
+.logo span {
+    color: var(--accent);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 23px;
+}
+
+.nav-links a {
+    font-size: 13px;
+    color: var(--muted);
+    transition: .2s;
+}
+
+.nav-links a:hover {
+    color: var(--accent);
+}
+
+.theme-btn, .menu-btn {
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    border-radius: 10px;
+    padding: 8px 12px;
+}
+
+.menu-btn {
+    display: none;
+}
+
+.hero {
+    min-height: 590px;
+    display: flex;
+    align-items: center;
+    padding: 85px 0;
+    background:
+        radial-gradient(ellipse at 80% 30%, #44307850, transparent 40%),
+        radial-gradient(ellipse at 20% 80%, #1c4c8450, transparent 40%);
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1.4fr .8fr;
+    align-items: center;
+    gap: 60px;
+}
+
+.tag {
+    display: inline-block;
+    border: 1px solid #a78bfa70;
+    color: var(--accent);
+    background: #a78bfa12;
+    border-radius: 50px;
+    padding: 5px 14px;
+    font-size: 12px;
+    margin-bottom: 22px;
+}
+
+h1, h2, h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: clamp(40px, 6vw, 68px);
+    letter-spacing: -2px;
+}
+
+.gradient {
+    background: linear-gradient(100deg, #c4b5fd, #60a5fa);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.hero p {
+    color: var(--muted);
+    margin: 23px 0;
+    max-width: 540px;
+}
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.btn {
+    padding: 11px 19px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    display: inline-block;
+    font-size: 14px;
+    transition: .25s;
+}
+
+.btn.primary {
+    color: #fff;
+    border: none;
+    background: linear-gradient(100deg, #8b5cf6, #3b82f6);
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+}
+
+.profile-wrap {
+    display: flex;
+    justify-content: center;
+}
+
+.profile {
+    width: 280px;
+    height: 320px;
+    border: 1px solid #a78bfa80;
+    border-radius: 35px;
+    background: linear-gradient(145deg, #272044, #111c33);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    box-shadow: 0 20px 80px #6045bd25;
+    transform: rotate(2deg);
+}
+
+
+
+
+/* Straight profile card */
+.profile-card {
+    width: 340px;
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 28px 24px;
+    text-align: center;
+    border: 1px solid #8b6be8;
+    border-radius: 24px;
+    background: rgba(30, 27, 60, 0.65);
+    box-shadow: 0 0 35px rgba(139, 92, 246, 0.15);
+    transform: none;
+    box-sizing: border-box;
+}
+
+/* Large photo inside the card */
+
+
+.profile-photo {
+    width: 100%;
+    height: 500px;
+    display: block;
+    object-fit: cover;
+    object-position: center 25%;
+    border: 2px solid #a78bfa;
+    border-radius: 16px;
+    box-sizing: border-box;
+    margin: 0 auto 22px;
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.18);
+}
+
+/* Give the photo a little space inside the card */
+.profile-card {
+    padding: 28px 22px;
+    box-sizing: border-box;
+    overflow: hidden;
+    transform: none;
+}
+
+
+
+@media (max-width: 600px) {
+    .profile-card {
+        width: 300px;
+        padding: 22px 18px;
+    }
+
+    .profile-photo {
+        height: 230px;
+    }
+}
+
+
+
+
+.profile h3 {
+    margin-top: 15px;
+    font-size: 23px;
+}
+
+.profile p {
+    margin: 3px;
+    font-size: 13px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 38px;
+    max-width: 480px;
+}
+
+.stat {
+    border-left: 2px solid var(--accent);
+    padding-left: 13px;
+}
+
+.stat strong {
+    display: block;
+    font: 700 23px 'Space Grotesk';
+}
+
+.stat span {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+section {
+    padding: 85px 0;
+    scroll-margin-top: 65px;
+}
+
+.section-head {
+    margin-bottom: 35px;
+}
+
+.eyebrow {
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.section-head h2 {
+    font-size: clamp(30px, 4vw, 40px);
+    margin: 9px 0;
+}
+
+.section-head p {
+    color: var(--muted);
+}
+
+.about-grid, .edu-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 25px;
+    transition: .25s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: #8b5cf680;
+}
+
+.card p {
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.card h3 {
+    font-size: 19px;
+}
+
+.info-list {
+    list-style: none;
+    margin-top: 10px;
+}
+
+.info-list li {
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+}
+
+.info-list span {
+    color: var(--muted);
+}
+
+.timeline {
+    border-left: 2px solid var(--accent);
+    padding-left: 25px;
+    margin-left: 8px;
+}
+
+.timeline .card {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.timeline .card::before {
+    content: "";
+    position: absolute;
+    left: -33px;
+    top: 30px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 15px var(--accent);
+}
+
+.year {
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.skill-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.skill {
+    padding: 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+}
+
+.skill .emoji {
+    font-size: 27px;
+}
+
+.skill h3 {
+    margin: 10px 0 13px;
+    font-size: 17px;
+}
+
+.bar {
+    height: 6px;
+    background: var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.bar div {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #8b5cf6, #60a5fa);
+    border-radius: 20px;
+    transition: width 1.2s ease;
+}
+
+.skill small {
+    display: block;
+    text-align: right;
+    color: var(--muted);
+    margin-top: 5px;
+}
+
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+}
+
+.project-top {
+    height: 130px;
+    display: grid;
+    place-items: center;
+    font-size: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #352458, #172d50);
+    margin-bottom: 20px;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.chips span {
+    border-radius: 30px;
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.project-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    font-size: 13px;
+    color: var(--accent);
+}
+
+.achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.achievement-icon {
+    font-size: 30px;
+    margin-bottom: 12px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.gallery-item {
+    min-height: 155px;
+    border-radius: 15px;
+    border: 1px solid var(--border);
+    background: linear-gradient(135deg, #302044, #18314a);
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+}
+
+.gallery-item span {
+    display: block;
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.contact-box {
+    background:
+        radial-gradient(ellipse at 90% 10%, #6d4bb440, transparent 50%),
+        var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 45px;
+    text-align: center;
+}
+
+.contact-box p {
+    color: var(--muted);
+    margin: 15px auto 25px;
+    max-width: 500px;
+}
+
+.contact-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+
+.participation-card {
+    width: 100%;
+    padding: 22px;
+    box-sizing: border-box;
+}
+
+.participation-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+}
+
+.participation-card h3 {
+    margin-bottom: 10px;
+}
+
+.event-role {
+    color: #b9a0ff;
+    font-weight: 600;
+}
+
+.event-photo {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    display: block;
+}
+
+
+footer {
+    padding: 25px 0;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: .65s;
+}
+
+.reveal.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 800px) {
+    .menu-btn {
+        display: block;
+    }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 72px;
+        left: 0;
+        width: 100%;
+        padding: 22px 5%;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+
+    .hero-grid, .about-grid, .edu-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-wrap {
+        margin-top: 15px;
+    }
+
+    .skill-grid, .achievement-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero {
+        padding: 65px 0;
+    }
+
+    section {
+        padding: 65px 0;
+    }
+}
+
+@media (max-width: 520px) {
+    .skill-grid, .project-grid, .achievement-grid,
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-box {
+        padding: 28px 18px;
+    }
+
+    .profile {
+        width: 240px;
+        height: 260px;
+    }
+
+    .stats {
+        gap: 8px;
+    }
+
+    .stat strong {
+        font-size: 19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <div class="container navbar">
+        <a class="logo" href="#home">Anushka<span>.</span></a>
+
+        <div class="nav-links" id="navLinks">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#education">Education</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#achievements">Achievements</a>
+            <a href="#contact">Contact</a>
+        </div>
+
+        <div style="display:flex;gap:8px">
+            <button class="theme-btn" id="themeBtn" aria-label="Toggle theme">☀️</button>
+            <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+        </div>
+    </div>
+</nav>
+
+<main>
+<section class="hero" id="home">
+    <div class="container hero-grid">
+        <div>
+            <span class="tag">✦ STUDENT • DEVELOPER • CREATIVE THINKER</span>
+
+            <h1>Hello, I'm<br><span class="gradient">Anushka Paliwal.</span></h1>
+
+            <p>
+                A passionate student exploring technology, web development,
+                artificial intelligence and creative design. I love learning
+                new things and turning ideas into meaningful projects.
+            </p>
+
+            <div class="buttons">
+                <a class="btn primary" href="#projects">Explore My Work ↗</a>
+                <a class="btn" href="#contact">Let's Connect</a>
+            </div>
+
+            <div class="stats">
+                <div class="stat">
+                    <strong>04+</strong>
+                    <span>Semesters Completed</span>
+                </div>
+                <div class="stat">
+                    <strong>AI</strong>
+                    <span>Learning & Exploring</span>
+                </div>
+                <div class="stat">
+                    <strong>∞</strong>
+                    <span>Ideas to Build</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-wrap">
+            <div class="profile">
+                <img src="myphoto.jpeg" alt="Anushka's Profile Photo" class="profile-photo">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="about">
+    <div class="container">
+        <div class="section-head reveal">
+            <span class="eyebrow">Get to know me</span>
+            <h2>About <span class="gradient">Me.</span></h2>
+            <p>A little introduction to who I am and what drives me.</p>
+        </div>
+
+        <div class="about-grid">
+            <div class="card reveal">
+                <h3>My Introduction</h3>
+                <p>
+                    I am a college student with a growing interest in
+                    programming, artificial intelligence, web development
+                    and design. I enjoy solving problems, experimenting
+                    with ideas and building projects that improve my skills.
+                </p>
+                <p>
+                    My goal is to become a confident professional, strengthen
+                    my technical and communication skills, and gain practical
+                    experience through internships and real-world projects.
+                </p>
+            </div>
+
+            <div class="card reveal">
+                <h3>Quick Facts</h3>
+                <ul class="info-list">
+                    <li><span>Education:</span> Undergraduate Student</li>
+                    <li><span>Interests:</span> Web Development & AI/ML</li>
+                    <li><span>Creative Side:</span> Branding & Graphic Design</li>
+                    <li><span>Currently Learning:</span> New technologies</li>
+                    <li><span>Career Goal:</span> Internship & Professional Growth</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="education">
+    <div class="container">
+        <div class="section-head reveal">
+            <span class="eyebrow">My journey</span>
+            <h2>Education & <span class="gradient">Academics.</span></h2>
+            <p>My academic background and learning journey.</p>
+        </div>
+
+        <div class="edu-grid">
+            <div class="timeline reveal">
+                <div class="card">
+                    <span class="year">CURRENT</span>
+                    <h3 style="margin-top:8px">Undergraduate Degree</h3>
+                    <p>College / Symbiosis International University</p>
+                    <p>Course: B.Tech Computer Science Engineering</p>
+                </div>
+
+                <div class="card">
+                    <span class="year">PREVIOUS</span>
+                    <h3 style="margin-top:8px">Higher Secondary Education</h3>
+                    <p>Delhi Public School, Lava • 2024</p>
+                </div>
+
+                <div class="card">
+                    <span class="year">PREVIOUS</span>
+                    <h3 style="margin-top:8px">Secondary Education</h3>
+                    <p>Podar International School • 2022</p>
+                </div>
+            </div>
+
+            <div class="card reveal">
+                <h3>Semester Performance</h3>
+                <p>Replace these values with your official academic records.</p>
+                <ul class="info-list">
+                    <li>Semester 1 <span style="float:right">7.78</span></li>
+                    <li>Semester 2 <span style="float:right">7.84</span></li>
+                    <li>Semester 3 <span style="float:right">7.40</span></li>
+                    <li>Semester 4 <span style="float:right">7.68</span></li>
+                    <li>Semester 5 <span style="float:right">Upcoming</span></li>
+                    <li>Semester 6 <span style="float:right">Upcoming</span></li>
+                    <li>Semester 7 <span style="float:right">Upcoming</span></li>
+                </ul>
+                <p>Academic scores are displayed as provided; confirm them before publishing.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="skills">
+    <div class="container">
+        <div class="section-head reveal">
+            <span class="eyebrow">What I work with</span>
+            <h2>Technical <span class="gradient">Skills.</span></h2>
+            <p>Technologies and tools I am learning and practising.</p>
+        </div>
+
+        <div class="skill-grid">
+            <div class="skill reveal">
+                <h3>Python</h3>
+                <div class="bar"><div data-width="75%"></div></div>
+                <small>Learning & Practising</small>
+            </div>
+
+            <div class="skill reveal">
+                <h3>Web Developement</h3>
+                <div class="bar"><div data-width="55%"></div></div>
+                <small>Building Foundations</small>
+            </div>
+
+            <div class="skill reveal">
+                <h3>Graphic Design</h3>
+                <div class="bar"><div data-width="60%"></div></div>
+                <small>Branding & Visual Design</small>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<section id="projects">
+    <div class="container">
+        <div class="section-head reveal">
+            <span class="eyebrow">Things I've built</span>
+            <h2>Featured <span class="gradient">Projects.</span></h2>
+            <p>Three projects that showcase my technical skills and creativity.</p>
+        </div>
+
+        <div class="project-grid">
+
+            <!-- PROJECT 1 -->
+            <div class="card reveal">
+                <div class="project-top"><h3>Driver Drowsiness Detection</h3></div>
+                <p>
+                    A driver safety project designed to detect signs of
+                    drowsiness and help alert the driver, with the goal of
+                    improving road safety through technology.
+                </p>
+                <div class="chips">
+                    <span>Python</span>
+                    <span>Computer Vision</span>
+                    <span>OpenCV</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/anushka-1419/Driver-Drowsiness-Detection.git" target="_blank"
+                       rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <!-- PROJECT 2 -->
+            <div class="card reveal">
+                <div class="project-top"><h3>StayWise AI</h3></div>
+                <p>
+                    An AI-powered hotel review agent that researches guest
+                    experiences and summarizes hotel strengths, complaints,
+                    service quality and recurring issues to help users make
+                    informed decisions.
+                </p>
+                <div class="chips">
+                    <span>Python</span>
+                    <span>Flask</span>
+                    <span>Gemini AI</span>
+                    <span>Tavily API</span>
+                    <span>HTML/CSS</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/anushka-1419/StayWise-AI.git" target="_blank"
+                       rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+            <!-- PROJECT 3 -->
+            <div class="card reveal">
+                <div class="project-top"><h3>House Price Predictor</h3></div>
+                <p>
+                    A predictive application that estimates house prices
+                    using property-related information. The project explores
+                    data preprocessing, model training and price prediction.
+                </p>
+                <div class="chips">
+                    <span>Python</span>
+                    <span>Pandas</span>
+                    <span>Scikit-learn</span>
+                    <span>Data Analysis</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/anushka-1419/House-Price-Predictor.git" target="_blank"
+                       rel="noopener">GitHub ↗</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<section id="achievements">
+    <div class="container">
+
+        <div class="section-head reveal">
+            <span class="eyebrow">Learning & Recognition</span>
+            <h2>My <span class="gradient">Certifications.</span></h2>
+            <p>Certifications that reflect my learning and skills.</p>
+        </div>
+
+        <div class="achievement-grid">
+
+            <!-- Red Hat: Network Automation -->
+            <div class="card reveal">
+                <h3>Network Automation</h3>
+                <p class="certificate-issuer">Red Hat</p>
+                <p>Certification in Network Automation.</p>
+                <div class="project-links">
+                    <a href="certificates/network-automation.pdf"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        View Certificate ↗
+                    </a>
+                </div>
+            </div>
+
+            <!-- Red Hat: Python Programming -->
+            <div class="card reveal">
+                <h3>Python Programming</h3>
+                <p class="certificate-issuer">Red Hat</p>
+                <p>Certification in Python Programming.</p>
+                <div class="project-links">
+                    <a href="certificates/python-programming.pdf"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        View Certificate ↗
+                    </a>
+                </div>
+            </div>
+
+            <!-- Udemy: Mastering Agentic AI -->
+            <div class="card reveal">
+                <h3>Mastering Agentic AI</h3>
+                <p class="certificate-issuer">Udemy</p>
+                <p>Learning about agentic AI concepts and applications.</p>
+                <div class="project-links">
+                    <a href="certificates/mastering-agentic-ai.pdf"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        View Certificate ↗
+                    </a>
+                </div>
+            </div>
+
+            <!-- Infosys Springboard: DSA -->
+            <div class="card reveal">
+                <h3>Data Structures and Algorithms</h3>
+                <p class="certificate-issuer">Infosys Springboard</p>
+                <p>Certification in Data Structures and Algorithms.</p>
+                <div class="project-links">
+                    <a href="certificates/data-structures-algorithms.pdf"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        View Certificate ↗
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<section id="participation">
+    <div class="container">
+
+        <div class="section-head reveal">
+            <span class="eyebrow">Beyond Academics</span>
+            <h2>Event <span class="gradient">Experience.</span></h2>
+            <p>My experience in event coordination, teamwork, and managing online sessions.</p>
+        </div>
+
+        <div class="gallery-grid">
+
+            <!-- ICSIT Event Volunteering -->
+            <div class="gallery-item reveal">
+                <div class="participation-card">
+                    <h3>ICSIT — Event Volunteer</h3>
+                    <p class="event-role">Online Session Coordination</p>
+                    <p>
+                        Volunteered at the ICSIT event organized at my college,
+                        helping manage the workflow of online presentation
+                        sessions and coordinating the presentation process.
+                    </p>
+
+                    <div class="project-links">
+                        <span class="certificate-label">
+                            ✓ Volunteer Experience
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ICSIT Event Photo -->
+            <div class="gallery-item reveal">
+                <div class="participation-card">
+                    <img
+                        src="images/icsit-event.jpeg"
+                        alt="Photo from the ICSIT college event"
+                        class="event-photo"
+                    >
+                    <h3>ICSIT Event Memories</h3>
+                    <p>
+                        A memorable experience of contributing to a college
+                        event and supporting online presentations.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+<section id="career">
+    <div class="container">
+
+        <div class="section-head reveal">
+            <span class="eyebrow">My Vision & Ambitions</span>
+            <h2>Career <span class="gradient">Aspirations.</span></h2>
+            <p>
+                Aspiring to learn, create, contribute, and make a meaningful impact.
+            </p>
+        </div>
+
+        <div class="about-grid">
+
+            <!-- Professional Interests -->
+            <div class="card reveal">
+                <h3>Professional Interests</h3>
+                <p>
+                    I aspire to build a rewarding career where I can apply my
+                    technical knowledge, creativity, and problem-solving skills
+                    to real-world challenges. I am eager to work on meaningful
+                    projects, learn from experienced professionals, and
+                    collaborate with people who inspire me to think differently.
+                </p>
+            </div>
+
+            <!-- Career Vision -->
+            <div class="card reveal">
+                <h3>My Career Vision</h3>
+                <p>
+                    My goal is to secure an opportunity where I can grow
+                    professionally while contributing fresh ideas, dedication,
+                    and a willingness to learn. I want to be part of a team
+                    that builds impactful solutions, embraces innovation,
+                    and creates value through technology and design.
+                </p>
+            </div>
+
+            <!-- What I Bring -->
+            <div class="card reveal">
+                <h3>What I Bring to the Table</h3>
+                <ul class="info-list">
+                    <li>01. A curious mind and a continuous learning mindset</li>
+                    <li>02. Creativity with a practical approach to problem-solving</li>
+                    <li>03. A collaborative attitude and openness to feedback</li>
+                    <li>04. Commitment to quality, growth, and meaningful work</li>
+                    <li>05. A genuine desire to contribute and make a difference</li>
+                </ul>
+            </div>
+
+            <!-- Long-Term Ambition -->
+            <div class="card reveal">
+                <h3>Looking Ahead</h3>
+                <p>
+                    I believe that a successful career is not just about
+                    getting a job, but also about making a difference through
+                    the work I do. I want to keep challenging myself, turn
+                    ideas into reality, support my team, and create work
+                    that I can be proud of.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<section id="contact">
+    <div class="container">
+        <div class="contact-box reveal">
+            <span class="eyebrow">Have an opportunity?</span>
+            <h2 style="font-size:clamp(30px,5vw,45px);margin-top:12px">
+                Let's Build Something <span class="gradient">Great.</span>
+            </h2>
+            <p>
+                I'm open to learning opportunities, collaborative projects,
+                internships and meaningful professional connections.
+                Feel free to reach out!
+            </p>
+
+            <div class="contact-links">
+                <a class="btn primary" id="emailLink" href="mailto:anupaliwal2007@gmail.com">✉ Email Me</a>
+                <a class="btn" id="githubLink" href="https://github.com/anushka-1419" target="_blank" rel="noopener">GitHub ↗</a>
+                <a class="btn" id="linkedinLink" href="https://www.linkedin.com/in/anushka-paliwal-239b27343?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener">LinkedIn ↗</a>
+            </div>
+        </div>
+    </div>
+</section>
+</main>
+
+<footer>
+    <div class="container">
+        <p>Designed & Built by Anushka Paliwal</p>
+        <p>© <span id="year"></span> • My Personal Portfolio</p>
+    </div>
+</footer>
+
+<script>
+// Mobile navigation
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
+
+menuBtn.addEventListener("click", () => {
+    navLinks.classList.toggle("open");
+    menuBtn.textContent = navLinks.classList.contains("open") ? "✕" : "☰";
+});
+
+document.querySelectorAll(".nav-links a").forEach(link => {
+    link.addEventListener("click", () => {
+        navLinks.classList.remove("open");
+        menuBtn.textContent = "☰";
+    });
+});
+
+// Light and dark theme
+const themeBtn = document.getElementById("themeBtn");
+
+themeBtn.addEventListener("click", () => {
+    document.body.classList.toggle("light");
+    const isLight = document.body.classList.contains("light");
+    themeBtn.textContent = isLight ? "🌙" : "☀️";
+});
+
+// Reveal animations on scroll
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+
+            entry.target.querySelectorAll(".bar div").forEach(bar => {
+                bar.style.width = bar.dataset.width;
+            });
+
+            observer.unobserve(entry.target);
+        }
+    });
+}, { threshold: 0.12 });
+
+document.querySelectorAll(".reveal").forEach(element => {
+    observer.observe(element);
+});
+
+// Dynamic footer year
+document.getElementById("year").textContent = new Date().getFullYear();
+
+// Smooth scrolling for navigation
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", event => {
+        const target = document.querySelector(anchor.getAttribute("href"));
+
+        if (target) {
+            event.preventDefault();
+            target.scrollIntoView({ behavior: "smooth" });
+        }
+    });
+});
+</script>
+
+</body>
+</html>
